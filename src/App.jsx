@@ -80,6 +80,7 @@ const submitRSVP = async () => {
       setIsMuted(false);
     }
   };
+  
   // Lock page scrolling until the invitation is opened
 useEffect(() => {
   document.body.style.overflow = isOpened ? 'auto' : 'hidden';
@@ -1353,32 +1354,24 @@ useEffect(() => {
   </div>
 
 
-  {/* ================= SCROLLABLE LITTLE STARS NAMES ================= */}
+  {/* ================= LITTLE STARS NAMES ================= */}
 <div
-  className="little-stars-scroll"
   style={{
     width: '100%',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    WebkitOverflowScrolling: 'touch',
-    overscrollBehaviorX: 'contain',
-    touchAction: 'pan-x',
-    cursor: 'grab',
-    padding: '4px 0 8px',
-    boxSizing: 'border-box',
-    scrollbarWidth: 'none',
-    msOverflowStyle: 'none'
+    overflow: 'hidden',
+    padding: '4px 4px 8px',
+    boxSizing: 'border-box'
   }}
 >
+  {/* FIRST 5 NAMES */}
   <div
     style={{
       display: 'flex',
       alignItems: 'center',
-      width: 'max-content',
-      minWidth: '100%',
-      justifyContent: 'flex-start',
+      justifyContent: 'center',
+      width: '100%',
+      flexWrap: 'nowrap',
       whiteSpace: 'nowrap',
-      padding: '0 12px',
       boxSizing: 'border-box'
     }}
   >
@@ -1387,33 +1380,119 @@ useEffect(() => {
       'Yuvaan',
       'Shrey',
       'Aarav',
-      'Krishiv',
-      'Advit',
-      'Bhavya',
-      'Ridhaan',
-      'Shivay'
+      'Krishiv'
     ].map((name, index) => (
       <React.Fragment key={name}>
         <span
           style={{
             fontFamily: "'Cormorant Garamond', serif",
             color: '#8B1E2D',
-            fontSize: '1rem',
+            fontSize: '0.82rem',
             fontWeight: 600,
+            letterSpacing: '-0.2px',
             lineHeight: 1,
             whiteSpace: 'nowrap',
-            flexShrink: 0
+            flexShrink: 1
           }}
         >
           {name}
         </span>
 
-        {index < 8 && (
+        {index < 4 && (
           <span
             style={{
               color: '#B18435',
-              fontSize: '0.7rem',
-              margin: '0 9px',
+              fontSize: '0.5rem',
+              margin: '0 4px',
+              flexShrink: 0
+            }}
+          >
+            ✦
+          </span>
+        )}
+      </React.Fragment>
+    ))}
+  </div>
+
+  {/* MIDDLE SEPARATOR */}
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      margin: '7px 0',
+      gap: '6px'
+    }}
+  >
+    <div
+      style={{
+        height: '1px',
+        flex: 1,
+        background: 'rgba(177, 132, 53, 0.45)'
+      }}
+    />
+
+    <span
+      style={{
+        color: '#B18435',
+        fontSize: '0.55rem',
+        lineHeight: 1
+      }}
+    >
+      ✦
+    </span>
+
+    <div
+      style={{
+        height: '1px',
+        flex: 1,
+        background: 'rgba(177, 132, 53, 0.45)'
+      }}
+    />
+  </div>
+
+  {/* SECOND 5 NAMES */}
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      flexWrap: 'nowrap',
+      whiteSpace: 'nowrap',
+      boxSizing: 'border-box'
+    }}
+  >
+    {[
+      'Advit',
+      'Bhavya',
+      'Ridhaan',
+      'Shivay',
+      'Adhiraj'
+    ].map((name, index) => (
+      <React.Fragment key={name}>
+        <span
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            color: '#8B1E2D',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+            letterSpacing: '-0.2px',
+            lineHeight: 1,
+            whiteSpace: 'nowrap',
+            flexShrink: 1
+          }}
+        >
+          {name}
+        </span>
+
+        {index < 4 && (
+          <span
+            style={{
+              color: '#B18435',
+              fontSize: '0.5rem',
+              margin: '0 4px',
               flexShrink: 0
             }}
           >
