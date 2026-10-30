@@ -1,0 +1,204 @@
+/* --- 1. Opening Cover Screen --- */
+.cover-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #120305;
+  cursor: pointer;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.cover-screen.opened {
+  opacity: 0;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+.cover-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.cover-btn {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.65);
+  color: #E8D3A7;
+  border: 1px solid #C5A059;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  backdrop-filter: blur(4px);
+  animation: pulseGlow 2s infinite;
+}
+
+/* --- 2. Floating Navbar --- */
+.floating-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 16px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border: 1px solid #E8D3A7;
+  width: max-content;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #2C1810;
+  font-size: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.nav-btn.primary {
+  background: #A62136;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* --- 3. Hero Video Section --- */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #FDF9F1;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-frame-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  margin-top: -10%;
+  color: #8B1E2D;
+}
+
+.hero-content h1 {
+  font-size: 4.5rem;
+  font-weight: 400;
+  line-height: 0.9;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+}
+
+/* --- 4. Content Sections --- */
+.content-section {
+  padding: 50px 24px;
+  text-align: center;
+  position: relative;
+  z-index: 4;
+  background: #FAF5F0;
+}
+
+.invite-card {
+  background: #FFF;
+  border: 1px solid #E8D3A7;
+  border-radius: 16px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.seal-img {
+  width: 65px;
+  margin-top: 15px;
+}
+
+/* --- 5. Petal Scratch Canvas --- */
+.scratch-container {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFF;
+  border: 1px solid #E8D3A7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.scratch-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* --- 6. Event Details --- */
+.event-card {
+  background: #FFF;
+  border: 1px solid #E8D3A7;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  text-align: left;
+}
+
+.event-card img {
+  width: 90px;
+  height: 120px;
+  border-radius: 45px 45px 10px 10px;
+  object-fit: cover;
+  border: 1px solid #C5A059;
+}
+
+.btn-solid {
+  background: #A62136;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  width: 100%;
+  cursor: pointer;
+}

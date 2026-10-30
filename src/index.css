@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Prevents whole screen scrolling, keeps it inside the app frame */
+  background-color: #120305;
+  font-family: 'Montserrat', sans-serif;
+  color: #2C1810;
+}
+
+/* FIX: Forces the root to take full screen and center the app */
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: radial-gradient(circle at 50% 50%, rgba(139, 30, 45, 0.4) 0%, #120305 70%);
+}
+
+/* Mobile-first constraints identical to reference site */
+.app-frame {
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  background-color: #FAF5F0;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Desktop float effect */
+@media (min-width: 450px) {
+  .app-frame {
+    height: 92vh;
+    border-radius: 20px;
+    border: 2px solid #C5A059;
+  }
+  
+  .app-frame::-webkit-scrollbar { width: 4px; }
+  .app-frame::-webkit-scrollbar-track { background: #FAF5F0; }
+  .app-frame::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+}
+
+/* Typography Defaults */
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-script { font-family: 'Great Vibes', cursive; }
+.font-body { font-family: 'Marcellus', serif; }
+.font-hindi { font-family: 'Rozha One', serif; }
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(197, 160, 89, 0.4); transform: scale(1); }
+  50% { box-shadow: 0 0 25px rgba(197, 160, 89, 0.8); transform: scale(1.03); }
+}
