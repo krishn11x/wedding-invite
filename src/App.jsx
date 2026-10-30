@@ -333,13 +333,13 @@ useEffect(() => {
     >
 
       <p style={{ margin: '8px 0' }}>
-        <b>Grandson of</b><br />
-        Shri Ishwar Chand Tayal & Smt Urmila Devi
+        <b>GrandDaughter of</b><br />
+        Late Shri RadheyShyam Gupta & Late Smt Ram Kali Devi
       </p>
 
       <p style={{ margin: '8px 0' }}>
-        <b>Son of</b><br />
-        Shri Naveen Aggarwal & Smt Uma Aggarwal
+        <b>Daughter of</b><br />
+        Shri Anup Gupta & Late Smt Chhavi Gupta
       </p>
 
       <div
@@ -352,13 +352,13 @@ useEffect(() => {
       />
 
       <p style={{ margin: '8px 0' }}>
-        <b>Granddaughter of</b><br />
-        Late Shri RadheyShyam Gupta & Late Smt Ram Kali Devi
+        <b>GrandSon of</b><br />
+        Late Shri Ishwar Chand Tayal & Late Smt Urmila Devi
       </p>
 
       <p style={{ margin: '8px 0' }}>
-        <b>Daughter of</b><br />
-        Shri Anup Gupta & Late Smt Chhavi Gupta
+        <b>Son of</b><br />
+        Shri Naveen Aggarwal & Smt Uma Aggarwal
       </p>
 
     </div>
@@ -763,13 +763,14 @@ useEffect(() => {
       </div>
     </div>
     
-    {/* WELL WISHERS / RISHTEDAAR BOX */}
+    
 <div
  
 >
   
 
-  {/* ================= WELL WISHERS + CORDIALLY INVITED ================= */}
+  {/* ================= GRATITUDE + CORDIALLY INVITED BOX ================= */}
+
 <div
   style={{
     width: 'calc(100% - 28px)',
@@ -780,6 +781,7 @@ useEffect(() => {
     position: 'relative',
     overflow: 'hidden',
 
+    /* KEEPING YOUR EXISTING SHINY BACKGROUND */
     background: `
       radial-gradient(circle at 8% 12%, rgba(226,168,168,0.20) 0, rgba(226,168,168,0.10) 12%, transparent 27%),
       radial-gradient(circle at 92% 18%, rgba(203,174,105,0.18) 0, rgba(203,174,105,0.08) 13%, transparent 28%),
@@ -794,7 +796,8 @@ useEffect(() => {
     boxShadow: '0 8px 28px rgba(44,24,16,0.09)'
   }}
 >
-  {/* CORNER ORNAMENTS */}
+  {/* ================= CORNER ORNAMENTS ================= */}
+
   <div
     style={{
       position: 'absolute',
@@ -851,7 +854,9 @@ useEffect(() => {
     ❧
   </div>
 
-  {/* ================= HEADING ================= */}
+
+  {/* ================= MAIN HEADING ================= */}
+
   <div
     style={{
       textAlign: 'center',
@@ -869,14 +874,16 @@ useEffect(() => {
     AND BLESSINGS
   </div>
 
-  {/* TOP ORNAMENT */}
+
+  {/* ================= TOP ORNAMENT ================= */}
+
   <div
     style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       gap: '8px',
-      marginBottom: '20px'
+      marginBottom: '28px'
     }}
   >
     <div
@@ -906,250 +913,276 @@ useEffect(() => {
   </div>
 
 
-  {/* ================= TWO MATCHING COLUMNS ================= */}
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: '1fr 1px 1fr',
-    columnGap: '20px',
-    alignItems: 'start',
-    width: '100%'
-  }}
->
-  {/* ================= LEFT: WELL WISHERS ================= */}
+  {/* ================= CENTERED CORDIALLY INVITED ================= */}
+
   <div
     style={{
       width: '100%',
       textAlign: 'center',
-      minWidth: 0
+      fontFamily: "'Great Vibes', cursive",
+      color: '#A66A20',
+      fontSize: '2.15rem',
+      lineHeight: '1.1',
+      minHeight: '58px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      whiteSpace: 'nowrap',
+      margin: '0 auto 8px'
     }}
   >
-    <div
-      style={{
-        fontFamily: "'Great Vibes', cursive",
-        color: '#A66A20',
-        fontSize: '1.45rem',
-        lineHeight: '1',
-        height: '34px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        whiteSpace: 'nowrap'
-      }}
-    >
-      Well Wishers
-    </div>
-
-    {/* Heading underline */}
-    <div
-      style={{
-        width: '100%',
-        height: '1px',
-        background: '#C5A059',
-        margin: '10px auto 18px',
-        position: 'relative'
-      }}
-    >
-      <span
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: '#FFF9F1',
-          padding: '0 6px',
-          color: '#A51F35',
-          fontSize: '8px'
-        }}
-      >
-        ❧
-      </span>
-    </div>
-
-    {/* Name 1 */}
-    <div
-      style={{
-        height: '38px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Cormorant Garamond', serif",
-        color: '#8B1E2D',
-        fontSize: '1.18rem',
-        fontWeight: 600,
-        whiteSpace: 'nowrap'
-      }}
-    >
-      Amar Gupta
-    </div>
-
-    {/* Small ornament */}
-    <div
-      style={{
-        height: '22px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#B18435',
-        fontSize: '8px'
-      }}
-    >
-      ✦
-    </div>
-
-    {/* Name 2 */}
-    <div
-      style={{
-        height: '38px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Cormorant Garamond', serif",
-        color: '#8B1E2D',
-        fontSize: '1.18rem',
-        fontWeight: 600,
-        whiteSpace: 'nowrap'
-      }}
-    >
-      Krishna Gupta
-    </div>
+    Cordially Invited by
   </div>
 
 
-  {/* ================= CENTER DIVIDER ================= */}
+  {/* ================= DIVIDER BELOW HEADING ================= */}
+
   <div
     style={{
-      width: '1px',
-      height: '150px',
-      background:
-        'linear-gradient(to bottom, transparent, #C5A059 10%, #C5A059 90%, transparent)',
-      position: 'relative'
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      margin: '0 auto 20px',
+      width: '100%'
     }}
   >
+    <div
+      style={{
+        flex: 1,
+        height: '1px',
+        background: 'linear-gradient(to right, transparent, #C5A059)'
+      }}
+    />
+
+    <span
+      style={{
+        color: '#A51F35',
+        fontSize: '9px',
+        background: '#FFF9F1',
+        padding: '0 5px'
+      }}
+    >
+      ❧
+    </span>
+
+    <div
+      style={{
+        flex: 1,
+        height: '1px',
+        background: 'linear-gradient(to left, transparent, #C5A059)'
+      }}
+    />
+  </div>
+
+
+  {/* ================= NAMES AREA ================= */}
+
+  <div
+    style={{
+      position: 'relative',
+      width: '100%',
+      maxWidth: '440px',
+      margin: '0 auto',
+      padding: '4px 0 8px'
+    }}
+  >
+
+    {/* CENTER VERTICAL DIVIDER */}
+
+    <div
+      style={{
+        position: 'absolute',
+        top: '0',
+        bottom: '0',
+        left: '50%',
+        width: '1px',
+        transform: 'translateX(-50%)',
+        background:
+          'linear-gradient(to bottom, transparent, #C5A059 12%, #C5A059 88%, transparent)'
+      }}
+    />
+
+    {/* CENTER ORNAMENT */}
+
     <div
       style={{
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '28px',
-        height: '28px',
+        width: '30px',
+        height: '30px',
         borderRadius: '50%',
         background: '#FFF9F1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         color: '#B18435',
-        fontSize: '12px'
+        fontSize: '12px',
+        zIndex: 2
       }}
     >
       ✦
     </div>
-  </div>
 
 
-  {/* ================= RIGHT: CORDIALLY INVITED ================= */}
-  <div
-    style={{
-      width: '100%',
-      textAlign: 'center',
-      minWidth: 0
-    }}
-  >
+    {/* ================= ROW 1 ================= */}
+
     <div
       style={{
-        fontFamily: "'Great Vibes', cursive",
-        color: '#A66A20',
-        fontSize: '1.45rem',
-        lineHeight: '1',
-        height: '34px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        whiteSpace: 'nowrap'
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        columnGap: '20px',
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
       }}
     >
-      Cordially Invited by
+
+      {/* ANUP */}
+
+      <div
+        style={{
+          height: '52px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: "'Cormorant Garamond', serif",
+          color: '#8B1E2D',
+          fontSize: '1.18rem',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
+        }}
+      >
+        Sh. Anup Gupta
+      </div>
+
+
+      {/* MANOJ */}
+
+      <div
+        style={{
+          height: '52px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: "'Cormorant Garamond', serif",
+          color: '#8B1E2D',
+          fontSize: '1.18rem',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
+        }}
+      >
+        Sh. Manoj Gupta
+      </div>
+
     </div>
 
-    {/* Heading underline */}
+
+    {/* ================= MIDDLE ORNAMENTS ================= */}
+
     <div
       style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        columnGap: '20px',
         width: '100%',
-        height: '1px',
-        background: '#C5A059',
-        margin: '10px auto 18px',
-        position: 'relative'
+        position: 'relative',
+        zIndex: 1
       }}
     >
-      <span
+
+      <div
         style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: '#FFF9F1',
-          padding: '0 6px',
-          color: '#A51F35',
+          height: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#B18435',
           fontSize: '8px'
         }}
       >
-        ❧
-      </span>
+        ✦
+      </div>
+
+      <div
+        style={{
+          height: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#B18435',
+          fontSize: '8px'
+        }}
+      >
+        ✦
+      </div>
+
     </div>
 
-    {/* Name 1 */}
+
+    {/* ================= ROW 2 ================= */}
+
     <div
       style={{
-        height: '38px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Cormorant Garamond', serif",
-        color: '#8B1E2D',
-        fontSize: '1.18rem',
-        fontWeight: 600,
-        whiteSpace: 'nowrap'
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        columnGap: '20px',
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
       }}
     >
-      Sh. Manoj Gupta
+
+      {/* KRISHNA */}
+
+      <div
+        style={{
+          height: '52px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: "'Cormorant Garamond', serif",
+          color: '#8B1E2D',
+          fontSize: '1.18rem',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
+        }}
+      >
+        Krishna Gupta
+      </div>
+
+
+      {/* AMAR */}
+
+      <div
+        style={{
+          height: '52px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: "'Cormorant Garamond', serif",
+          color: '#8B1E2D',
+          fontSize: '1.18rem',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
+        }}
+      >
+        Amar Gupta
+      </div>
+
     </div>
 
-    {/* Small ornament */}
-    <div
-      style={{
-        height: '22px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#B18435',
-        fontSize: '8px'
-      }}
-    >
-      ✦
-    </div>
-
-    {/* Name 2 */}
-    <div
-      style={{
-        height: '38px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Cormorant Garamond', serif",
-        color: '#8B1E2D',
-        fontSize: '1.18rem',
-        fontWeight: 600,
-        whiteSpace: 'nowrap'
-      }}
-    >
-      Sh. Anup Gupta
-    </div>
   </div>
-</div>
 
 
   {/* ================= BOTTOM ORNAMENT ================= */}
+
   <div
     style={{
       display: 'flex',
@@ -1184,7 +1217,7 @@ useEffect(() => {
       }}
     />
   </div>
-</div>
+
 </div>
 
 {/* ================= LITTLE STARS BOX ================= */}
@@ -1543,6 +1576,7 @@ useEffect(() => {
     />
   </div>
 </div>
+      </div>
     {/* 8. RSVP & CLOSING */}
     <div className="content-section" id="rsvp">
       <h2
