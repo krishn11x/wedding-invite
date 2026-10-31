@@ -4,269 +4,722 @@ import './App.css';
 export default function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
   const audioRef = useRef(null);
-  const [showRsvp, setShowRsvp] = useState(false);
-const [rsvpName, setRsvpName] = useState('');
-const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
-const [rsvpLoading, setRsvpLoading] = useState(false);
-
-const RSVP_URL =
-  'https://script.google.com/macros/s/AKfycbxqCQLjVpVuep31ah7QCeLB_78UO-PN_Ux91b_LUM7ur8zxMROdfK8OSY375KhRclaE2Q/exec';
-
-const submitRSVP = async () => {
-  const name = rsvpName.trim();
-
-  if (!name) return;
-
-  setRsvpLoading(true);
-
-  try {
-    await fetch(RSVP_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify({
-        name: name
-      })
-    });
-
-    setRsvpSubmitted(true);
-  } catch (error) {
-    console.error('RSVP submission error:', error);
-  } finally {
-    setRsvpLoading(false);
-  }
-};
   const canvasRef = useRef(null);
+
+  const [showRsvp, setShowRsvp] = useState(false);
+  const [rsvpName, setRsvpName] = useState('');
+  const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
+  const [rsvpLoading, setRsvpLoading] = useState(false);
+
+  const RSVP_URL =
+    'https://script.google.com/macros/s/AKfycbxqCQLjVpVuep31ah7QCeLB_78UO-PN_Ux91b_LUM7ur8zxMROdfK8OSY375KhRclaE2Q/exec';
+
+  const submitRSVP = async () => {
+    const name = rsvpName.trim();
+
+    if (!name) return;
+
+    setRsvpLoading(true);
+
+    try {
+      await fetch(RSVP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify({
+          name: name
+        })
+      });
+
+      setRsvpSubmitted(true);
+    } catch (error) {
+      console.error('RSVP submission error:', error);
+    } finally {
+      setRsvpLoading(false);
+    }
+  };
 
   // Exact assets from Phool Dwaar Reference
   const assets = {
-    audio: "/tenu-leke-mai-javanaga.mp3",
-    doorCover: "https://myindiaura.com/art/story/phool-dwaar/opening-poster.webp",
-    videoBg: "https://myindiaura.com/art/story/phool-dwaar/hero-loop.mp4",
-    frameArch: "https://myindiaura.com/art/story/phool-dwaar/frame-hero.webp",
-    flowerSprig: "https://myindiaura.com/art/story/phool-dwaar/flower-sprig.webp",
-    seal: "https://myindiaura.com/art/story/phool-dwaar/seal.webp",
-    haldi: "https://myindiaura.com/art/story/phool-dwaar/event-haldi.webp",
-    mehendi: "https://myindiaura.com/art/story/phool-dwaar/event-mehendi.webp",
-    wedding: "https://myindiaura.com/art/story/phool-dwaar/event-wedding.webp",
-    closingFrame: "https://myindiaura.com/art/story/phool-dwaar/frame-close.webp"
+    audio: '/tenu-leke-mai-javanaga.mp3',
+
+    doorCover:
+      'https://myindiaura.com/art/story/phool-dwaar/opening-poster.webp',
+
+    videoBg:
+      'https://myindiaura.com/art/story/phool-dwaar/hero-loop.mp4',
+
+    frameArch:
+      'https://myindiaura.com/art/story/phool-dwaar/frame-hero.webp',
+
+    flowerSprig:
+      'https://myindiaura.com/art/story/phool-dwaar/flower-sprig.webp',
+
+    seal:
+      'https://myindiaura.com/art/story/phool-dwaar/seal.webp',
+
+    haldi:
+      'https://myindiaura.com/art/story/phool-dwaar/event-haldi.webp',
+
+    mehendi:
+      'https://myindiaura.com/art/story/phool-dwaar/event-mehendi.webp',
+
+    wedding:
+      'https://myindiaura.com/art/story/phool-dwaar/event-wedding.webp',
+
+    closingFrame:
+      'https://myindiaura.com/art/story/phool-dwaar/frame-close.webp'
   };
 
   // Countdown Logic
   useEffect(() => {
     const targetDate = new Date('2026-11-26T19:00:00').getTime();
+
     const timer = setInterval(() => {
       const diff = targetDate - new Date().getTime();
+
       if (diff > 0) {
         setTimeLeft({
-          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((diff % (1000 * 60)) / 1000),
+          days: Math.floor(
+            diff / (1000 * 60 * 60 * 24)
+          ),
+
+          hours: Math.floor(
+            (diff % (1000 * 60 * 60 * 24)) /
+              (1000 * 60 * 60)
+          ),
+
+          minutes: Math.floor(
+            (diff % (1000 * 60 * 60)) /
+              (1000 * 60)
+          ),
+
+          seconds: Math.floor(
+            (diff % (1000 * 60)) /
+              1000
+          )
         });
       }
     }, 1000);
+
     return () => clearInterval(timer);
   }, []);
 
+  // Open invitation
   const handleOpen = () => {
     setIsOpened(true);
+
     if (audioRef.current && isMuted) {
       audioRef.current.play().catch(() => {});
       setIsMuted(false);
     }
   };
-  
-  // Lock page scrolling until the invitation is opened
+  // Pause music when app goes to background,
+// and resume it when the app comes back.
 useEffect(() => {
-  document.body.style.overflow = isOpened ? 'auto' : 'hidden';
+  let wasPlayingBeforeHidden = false;
+
+  const handleVisibilityChange = () => {
+    if (!audioRef.current) return;
+
+    if (document.hidden) {
+      // Remember whether music was actually playing
+      wasPlayingBeforeHidden =
+        !audioRef.current.paused && !isMuted;
+
+      // Stop music in background
+      audioRef.current.pause();
+    } else {
+      // App is visible again
+      // Resume only if it was playing before
+      if (wasPlayingBeforeHidden && !isMuted) {
+        audioRef.current.play().catch(() => {});
+      }
+    }
+  };
+
+  document.addEventListener(
+    'visibilitychange',
+    handleVisibilityChange
+  );
 
   return () => {
-    document.body.style.overflow = 'auto';
+    document.removeEventListener(
+      'visibilitychange',
+      handleVisibilityChange
+    );
   };
-}, [isOpened]);
+}, [isMuted]);
 
-  // Scratch to Reveal Canvas Logic
+  // ============================================================
+  // FULL PAGE SCROLL HINT AFTER OPENING
+  // ============================================================
+  //
+  // This scrolls the ACTUAL PAGE using window.scrollTo().
+  // It does NOT transform only the hero section.
+  //
+  // Sequence:
+  // 1. Door opens
+  // 2. Wait for opening animation
+  // 3. Whole page moves down ~10%
+  // 4. Returns
+  // 5. Moves down again
+  // 6. Returns
+  //
+  // This visually tells the guest that the invitation is scrollable.
+  // ============================================================
+
   useEffect(() => {
-    if (!isOpened || !canvasRef.current) return;
+    if (!isOpened) return;
+
+    let cancelled = false;
+    const timers = [];
+    const animationFrames = [];
+
+    const smoothScroll = (targetY, duration = 900) => {
+      if (cancelled) return;
+
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        if (cancelled) return;
+
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(
+          elapsed / duration,
+          1
+        );
+
+        // Smooth ease-in-out
+        const eased =
+          progress < 0.5
+            ? 2 * progress * progress
+            : 1 -
+              Math.pow(
+                -2 * progress + 2,
+                2
+              ) / 2;
+
+        window.scrollTo(
+          0,
+          startY + distance * eased
+        );
+
+        if (progress < 1) {
+          const frame =
+            requestAnimationFrame(animate);
+
+          animationFrames.push(frame);
+        }
+      };
+
+      const frame =
+        requestAnimationFrame(animate);
+
+      animationFrames.push(frame);
+    };
+
+    // Give the door-opening animation enough time to finish.
+    const startTimer = setTimeout(() => {
+      if (cancelled) return;
+
+      const originalY = window.scrollY;
+
+      // Around 10% of the viewport height.
+      // Minimum 70px so it is also noticeable on small screens.
+      const moveAmount = Math.max(
+        window.innerHeight * 0.10,
+        70
+      );
+
+      // FIRST movement
+      smoothScroll(
+        originalY + moveAmount,
+        1000
+      );
+
+      // Return to original position
+      timers.push(
+        setTimeout(() => {
+          if (cancelled) return;
+
+          smoothScroll(
+            originalY,
+            900
+          );
+        }, 1150)
+      );
+
+      // SECOND movement
+      timers.push(
+        setTimeout(() => {
+          if (cancelled) return;
+
+          smoothScroll(
+            originalY + moveAmount * 0.85,
+            900
+          );
+        }, 2250)
+      );
+
+      // Final return
+      timers.push(
+        setTimeout(() => {
+          if (cancelled) return;
+
+          smoothScroll(
+            originalY,
+            900
+          );
+        }, 3350)
+      );
+    }, 1400);
+
+    timers.push(startTimer);
+
+    return () => {
+      cancelled = true;
+
+      timers.forEach((timer) => {
+        clearTimeout(timer);
+      });
+
+      animationFrames.forEach((frame) => {
+        cancelAnimationFrame(frame);
+      });
+    };
+  }, [isOpened]);
+
+  // Lock page scrolling until the invitation is opened
+  useEffect(() => {
+    document.body.style.overflow =
+      isOpened ? 'auto' : 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpened]);
+
+  // ============================================================
+  // SCRATCH TO REVEAL CANVAS LOGIC
+  // ============================================================
+
+  useEffect(() => {
+    if (!isOpened || !canvasRef.current) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
-    // Set proper dimensions based on container
-    const rect = canvas.parentElement.getBoundingClientRect();
+
+    if (!ctx || !canvas.parentElement) {
+      return;
+    }
+
+    const rect =
+      canvas.parentElement.getBoundingClientRect();
+
     canvas.width = rect.width;
     canvas.height = rect.height;
 
     // Fill with rose magenta
     ctx.fillStyle = '#C53051';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw Text Overlay on Canvas
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    // Draw text overlay
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '600 12px Montserrat';
     ctx.textAlign = 'center';
-    ctx.fillText('SWIPE THE PETALS AWAY', canvas.width / 2, canvas.height / 2 + 5);
+
+    ctx.fillText(
+      'SWIPE THE PETALS AWAY',
+      canvas.width / 2,
+      canvas.height / 2 + 5
+    );
 
     let isScratching = false;
 
     const getPos = (e) => {
-      const bounds = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return { x: clientX - bounds.left, y: clientY - bounds.top };
+      const bounds =
+        canvas.getBoundingClientRect();
+
+      const clientX = e.touches
+        ? e.touches[0].clientX
+        : e.clientX;
+
+      const clientY = e.touches
+        ? e.touches[0].clientY
+        : e.clientY;
+
+      return {
+        x: clientX - bounds.left,
+        y: clientY - bounds.top
+      };
     };
 
-    const start = (e) => { isScratching = true; scratch(e); };
-    const stop = () => { isScratching = false; };
     const scratch = (e) => {
       if (!isScratching) return;
+
       const { x, y } = getPos(e);
-      ctx.globalCompositeOperation = 'destination-out';
+
+      ctx.globalCompositeOperation =
+        'destination-out';
+
       ctx.beginPath();
-      ctx.arc(x, y, 28, 0, Math.PI * 2);
+
+      ctx.arc(
+        x,
+        y,
+        28,
+        0,
+        Math.PI * 2
+      );
+
       ctx.fill();
     };
 
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('mousemove', scratch);
-    canvas.addEventListener('mouseup', stop);
-    canvas.addEventListener('touchstart', start, { passive: true });
-    canvas.addEventListener('touchmove', scratch, { passive: true });
-    canvas.addEventListener('touchend', stop);
+    const start = (e) => {
+      isScratching = true;
+      scratch(e);
+    };
 
+    const stop = () => {
+      isScratching = false;
+    };
+
+    canvas.addEventListener(
+      'mousedown',
+      start
+    );
+
+    canvas.addEventListener(
+      'mousemove',
+      scratch
+    );
+
+    canvas.addEventListener(
+      'mouseup',
+      stop
+    );
+
+    canvas.addEventListener(
+      'mouseleave',
+      stop
+    );
+
+    canvas.addEventListener(
+      'touchstart',
+      start,
+      { passive: true }
+    );
+
+    canvas.addEventListener(
+      'touchmove',
+      scratch,
+      { passive: true }
+    );
+
+    canvas.addEventListener(
+      'touchend',
+      stop
+    );
+
+    // Proper cleanup
     return () => {
-      // Cleanup handled automatically by React on unmount
+      canvas.removeEventListener(
+        'mousedown',
+        start
+      );
+
+      canvas.removeEventListener(
+        'mousemove',
+        scratch
+      );
+
+      canvas.removeEventListener(
+        'mouseup',
+        stop
+      );
+
+      canvas.removeEventListener(
+        'mouseleave',
+        stop
+      );
+
+      canvas.removeEventListener(
+        'touchstart',
+        start
+      );
+
+      canvas.removeEventListener(
+        'touchmove',
+        scratch
+      );
+
+      canvas.removeEventListener(
+        'touchend',
+        stop
+      );
     };
   }, [isOpened]);
 
   return (
     <div className="app-frame">
-      <audio ref={audioRef} loop src={assets.audio} />
 
-      {/* 1. CLOSED DOOR SCREEN */}
-      <div className={`cover-screen ${isOpened ? 'opened' : ''}`} onClick={handleOpen}>
-        <img src={assets.doorCover} alt="Closed Door" className="cover-image" />
-        <button className="cover-btn font-cinzel">TAP TO OPEN YOUR INVITE</button>
+      <audio
+        ref={audioRef}
+        loop
+        src={assets.audio}
+      />
+
+      {/* ======================================================
+          1. CLOSED DOOR SCREEN
+      ====================================================== */}
+
+      <div
+        className={`cover-screen ${
+          isOpened ? 'opened' : ''
+        }`}
+        onClick={handleOpen}
+      >
+        <img
+          src={assets.doorCover}
+          alt="Closed Door"
+          className="cover-image"
+        />
+
+        <button className="cover-btn font-cinzel">
+          TAP TO OPEN YOUR INVITE
+        </button>
       </div>
 
-      {/* FLOATING NAVBAR */}
+      {/* ======================================================
+          FLOATING NAVBAR
+      ====================================================== */}
+
       {isOpened && (
-        <div className="floating-nav">
-          <button className="nav-btn primary" onClick={() => document.getElementById('rsvp').scrollIntoView({behavior: 'smooth'})}>
-            RSVP
-          </button>
-          
-          <button className="nav-btn" onClick={() => {
-            audioRef.current[isMuted ? 'play' : 'pause']();
-            setIsMuted(!isMuted);
-          }}>
-            <i className={`fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}></i>
-          </button>
-        </div>
-      )}
+  <div className="floating-nav">
+
+    <button
+      className="nav-btn primary"
+      onClick={() => {
+        if (!audioRef.current) return;
+
+        if (isMuted) {
+          audioRef.current.play().catch(() => {});
+          setIsMuted(false);
+        } else {
+          audioRef.current.pause();
+          setIsMuted(true);
+        }
+      }}
+    >
+      {isMuted ? 'UNMUTE' : 'MUTE'}
+    </button>
+
+  </div>
+)}
+      
+
+      {/* ======================================================
+          HERO / FRONT PAGE
+      ====================================================== */}
 
       <div className="hero-section">
 
-  {/* GANESH JI + MANTRA — TOP */}
-  <div
-    style={{
-      position: 'absolute',
-      top: '145px',
-      left: '0',
-      width: '100%',
-      zIndex: 10,
-      textAlign: 'center',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
-    }}
-  >
-    <img
-      src="/gannu-ji.png"
-      alt="Ganesh Ji"
-      style={{
-        width: '55px',
-        height: '55px',
-        objectFit: 'contain',
-        display: 'block',
-        marginBottom: '5px'
-      }}
-    />
+        {/* ==================================================
+            GANESH JI + MANTRA
+        ================================================== */}
 
-    <div
-      className="font-hindi"
-      style={{
-        fontSize: '1.15rem',
-        color: '#8B1E2D',
-        margin: 0,
-        lineHeight: '1.2'
-      }}
-    >
-      || श्री गणेशाय नमः ||
-    </div>
-  </div>
+        <div
+          style={{
+            position: 'absolute',
+            top: '145px',
+            left: '0',
+            width: '100%',
+            zIndex: 10,
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
 
-  {/* HERO VIDEO */}
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="hero-video"
-  >
-    <source src={assets.videoBg} type="video/mp4" />
-  </video>
+          <img
+            src="/gannu-ji.png"
+            alt="Ganesh Ji"
+            style={{
+              width: '55px',
+              height: '55px',
+              objectFit: 'contain',
+              display: 'block',
+              marginBottom: '5px'
+            }}
+          />
 
-  <img
-    src={assets.frameArch}
-    alt="Floral Arch"
-    className="hero-frame-overlay"
-  />
+          <div
+            className="font-hindi"
+            style={{
+              fontSize: '1.15rem',
+              color: '#8B1E2D',
+              margin: 0,
+              lineHeight: '1.2'
+            }}
+          >
+            || श्री गणेशाय नमः ||
+          </div>
 
-  {/* HERO CONTENT */}
-  <div className="hero-content">
+        </div>
 
-    <p
-      style={{
-        letterSpacing: '2px',
-        fontSize: '0.85rem',
-        textTransform: 'uppercase',
-        marginBottom: '40px',
-        marginLeft: '30px',
-        fontWeight: 600
-        
-    
-      }}
-    >
-      A CELEBRATION OF LOVE
-    </p>
+        {/* ==================================================
+            HERO VIDEO
+        ================================================== */}
 
-    <h1 className="font-script">
-      Aanchal
-    </h1>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hero-video"
+        >
+          <source
+            src={assets.videoBg}
+            type="video/mp4"
+          />
+        </video>
 
-    <p
-      className="font-cinzel"
-      style={{
-        color: '#471111',
-        letterSpacing: '4px',
-        margin: '5px 0'
-      }}
-    >
-      WEDS
-    </p>
+        {/* ==================================================
+            FLORAL ARCH
+        ================================================== */}
 
-    <h1 className="font-script">
-      Harshit
-    </h1>
+        <img
+          src={assets.frameArch}
+          alt="Floral Arch"
+          className="hero-frame-overlay"
+        />
 
-  </div>
+        {/* ==================================================
+            HERO CONTENT
+        ================================================== */}
 
-</div>
+        <div className="hero-content">
+
+          <p
+            style={{
+              letterSpacing: '2px',
+              fontSize: '0.85rem',
+              textTransform: 'uppercase',
+              marginBottom: '40px',
+              marginLeft: '30px',
+              fontWeight: 600
+            }}
+          >
+            A CELEBRATION OF LOVE
+          </p>
+
+          <h1 className="font-script">
+            Aanchal
+          </h1>
+
+          <p
+            className="font-cinzel"
+            style={{
+              color: '#471111',
+              letterSpacing: '4px',
+              margin: '5px 0'
+            }}
+          >
+            WEDS
+          </p>
+
+          <h1 className="font-script">
+            Harshit
+          </h1>
+
+        </div>
+
+        {/* ==================================================
+            BLINKING SCROLL ARROW
+            Appears at bottom of the front page
+        ================================================== */}
+
+        {isOpened && (
+          <div
+            className="scroll-hint"
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              bottom: '24px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 40,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              pointerEvents: 'none'
+            }}
+          >
+
+            <div
+              style={{
+                fontFamily:
+                  'Montserrat, sans-serif',
+                fontSize: '0.60rem',
+                letterSpacing: '2px',
+                color: '#8B1E2D',
+                marginBottom: '7px',
+                fontWeight: 600
+              }}
+            >
+              SCROLL
+            </div>
+
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                border:
+                  '1px solid #C5A059',
+                background:
+                  'rgba(255, 253, 249, 0.94)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#8B1E2D',
+                fontSize: '23px',
+                lineHeight: 1,
+                boxShadow:
+                  '0 3px 14px rgba(44, 24, 16, 0.14)',
+                animation:
+                  'scrollArrowBlink 1.15s ease-in-out infinite'
+              }}
+            >
+              ↓
+            </div>
+
+          </div>
+        )}
+
+      </div>
 
       {/* 3. INVITATION LETTER */}
       <div className="content-section">
@@ -302,103 +755,235 @@ useEffect(() => {
 </div>
   <div className="invite-card">
 
-    <h2
-      className="font-script"
-      style={{
-        fontSize: '2.5rem',
-        color: '#8B1E2D',
-        margin: 0
-      }}
-    >
-      You're Cordially Invited    By
-    </h2>
+    
+<h2
+  className="font-script"
+  style={{
+    fontSize: '2.00 rem',
+    color: '#8B1E2D',
+    margin: 0,
+    lineHeight: 1.2
+  }}
+>
+  You're Cordially Invited By
+</h2>
 
-    <img
+<img
   src={assets.flowerSprig}
   alt="Flower"
-  style={{ width: '40px', margin: '15px 0 8px' }}
+  style={{
+    width: '40px',
+    margin: '12px 0 6px'
+  }}
 />
 
-{/* WEDDING MANTRA */}
-
+{/* WEDDING FAMILY DETAILS */}
 
 <div
   className="font-body"
+  style={{
+    fontSize: '0.9rem',
+    lineHeight: 1.55,
+    marginBottom: '18px'
+  }}
+>
+  {/* GRANDDAUGHTER */}
+  <p style={{ margin: '10px 0' }}>
+    <b
       style={{
-        fontSize: '0.78rem',
-        color: '#6D5A50',
-        lineHeight: 1.7,
-        marginBottom: '18px'
+        display: 'block',
+        fontSize: '0.96rem',
+        color: '#2e1a14',
+        fontWeight: 700,
+        textDecoration: 'underline',
+        textDecorationColor: '#C5A059',
+        textDecorationThickness: '1px',
+        textUnderlineOffset: '4px',
+        marginBottom: '6px'
       }}
     >
+      GrandDaughter of
+    </b>
 
-      <p style={{ margin: '8px 0' }}>
-        <b>GrandDaughter of</b><br />
-        Late Shri RadheyShyam Gupta & Late Smt Ram Kali Devi
-      </p>
-
-      <p style={{ margin: '8px 0' }}>
-        <b>Daughter of</b><br />
-        Shri Anup Gupta & Late Smt Chhavi Gupta
-      </p>
-
-      <div
-        style={{
-          width: '50px',
-          height: '1px',
-          background: '#C5A059',
-          margin: '14px auto'
-        }}
-      />
-
-      <p style={{ margin: '8px 0' }}>
-        <b>GrandSon of</b><br />
-        Late Shri Ishwar Chand Tayal & Late Smt Urmila Devi
-      </p>
-
-      <p style={{ margin: '8px 0' }}>
-        <b>Son of</b><br />
-        Shri Naveen Aggarwal & Smt Uma Aggarwal
-      </p>
-
-    </div>
-
-    <p
-      className="font-body"
+    <span
       style={{
-        fontSize: '0.85rem',
-        color: '#6D5A50',
-        lineHeight: 1.6,
-        margin: '15px 0 5px'
+        display: 'block',
+        fontSize: '0.91rem',
+        color: '#412e25',
+        fontWeight: 400
       }}
     >
-      With love,
-    </p>
+      Late Shri RadheyShyam Gupta & Late Smt Ram Kali Devi
+    </span>
+  </p>
 
-    <p
-      className="font-script"
+  {/* DAUGHTER */}
+  <p style={{ margin: '10px 0' }}>
+    <b
       style={{
-        fontSize: '1.8rem',
-        color: '#8B1E2D',
-        margin: '0 0 8px'
+        display: 'block',
+        fontSize: '0.96rem',
+        color: '#3F241B',
+        fontWeight: 700,
+        textDecoration: 'underline',
+        textDecorationColor: '#C5A059',
+        textDecorationThickness: '1px',
+        textUnderlineOffset: '4px',
+        marginBottom: '6px'
       }}
     >
-      Aanchal & Harshit
-    </p>
+      Daughter of
+    </b>
 
-    <p
-      className="font-body"
+    <span
       style={{
-        fontSize: '0.85rem',
-        color: '#6D5A50',
-        lineHeight: 1.6,
-        margin: 0
+        display: 'block',
+        fontSize: '0.91rem',
+        color: '#412e25',
+        fontWeight: 400
       }}
     >
-      together with their families, invite you to celebrate
-      with them as they begin their beautiful journey
-      of love, laughter and togetherness.
-    </p>
+      Shri Anup Gupta & Late Smt Chhavi Gupta
+    </span>
+  </p>
+
+  {/* DIVIDER */}
+   <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      margin: '0 auto 20px',
+      width: '100%'
+    }}
+  >
+    <div
+      style={{
+        flex: 1,
+        height: '1px',
+        background: 'linear-gradient(to right, transparent, #C5A059)'
+      }}
+    />
+
+    <span
+      style={{
+        color: '#A51F35',
+        fontSize: '9px',
+        background: '#FFF9F1',
+        padding: '0 5px'
+      }}
+    >
+      ❧
+    </span>
+
+    <div
+      style={{
+        flex: 1,
+        height: '1px',
+        background: 'linear-gradient(to left, transparent, #C5A059)'
+      }}
+    />
+  </div>
+
+  {/* GRANDSON */}
+  <p style={{ margin: '10px 0' }}>
+    <b
+      style={{
+        display: 'block',
+        fontSize: '0.96rem',
+        color: '#3F241B',
+        fontWeight: 700,
+        textDecoration: 'underline',
+        textDecorationColor: '#C5A059',
+        textDecorationThickness: '1px',
+        textUnderlineOffset: '4px',
+        marginBottom: '6px'
+      }}
+    >
+      GrandSon of
+    </b>
+
+    <span
+      style={{
+        display: 'block',
+        fontSize: '0.91rem',
+        color: '#412e25',
+        fontWeight: 400
+      }}
+    >
+      Shri Ishwar Chand Tayal & Smt Urmila Devi
+    </span>
+  </p>
+
+  {/* SON */}
+  <p style={{ margin: '10px 0' }}>
+    <b
+      style={{
+        display: 'block',
+        fontSize: '0.96rem',
+        color: '#412e25',
+        fontWeight: 700,
+        textDecoration: 'underline',
+        textDecorationColor: '#C5A059',
+        textDecorationThickness: '1px',
+        textUnderlineOffset: '4px',
+        marginBottom: '6px'
+      }}
+    >
+      Son of
+    </b>
+
+    <span
+      style={{
+        display: 'block',
+        fontSize: '0.91rem',
+        color: '#412e25',
+        fontWeight: 400
+      }}
+    >
+      Shri Naveen Aggarwal & Smt Uma Aggarwal
+    </span>
+  </p>
+</div>
+
+<p
+  className="font-body"
+  style={{
+    fontSize: '0.82rem',
+    color: '#6D5A50',
+    lineHeight: 1.6,
+    margin: '15px 0 5px'
+  }}
+>
+  With love,
+</p>
+
+<p
+  className="font-script"
+  style={{
+    fontSize: '1.65rem',
+    color: '#8B1E2D',
+    margin: '0 0 8px'
+  }}
+>
+  Aanchal & Harshit
+</p>
+
+<p
+  className="font-body"
+  style={{
+    fontSize: '0.82rem',
+    color: '#6D5A50',
+    lineHeight: 1.6,
+    margin: 0
+  }}
+>
+  together with their families, invite you to celebrate
+  with them as they begin their beautiful journey
+  of love, laughter and togetherness.
+</p>
+
 
     <img
       src={assets.seal}
@@ -1050,7 +1635,7 @@ useEffect(() => {
           justifyContent: 'center',
           fontFamily: "'Cormorant Garamond', serif",
           color: '#8B1E2D',
-          fontSize: '1.18rem',
+          fontSize: '1.10rem',
           fontWeight: 600,
           whiteSpace: 'nowrap',
           textAlign: 'center'
@@ -1070,8 +1655,9 @@ useEffect(() => {
           justifyContent: 'center',
           fontFamily: "'Cormorant Garamond', serif",
           color: '#8B1E2D',
-          fontSize: '1.18rem',
+          fontSize: '1.10rem',
           fontWeight: 600,
+          marginLeft: '-5px',
           whiteSpace: 'nowrap',
           textAlign: 'center'
         }}
@@ -1147,7 +1733,7 @@ useEffect(() => {
           justifyContent: 'center',
           fontFamily: "'Cormorant Garamond', serif",
           color: '#8B1E2D',
-          fontSize: '1.18rem',
+          fontSize: '1.10rem',
           fontWeight: 600,
           whiteSpace: 'nowrap',
           textAlign: 'center'
@@ -1167,7 +1753,7 @@ useEffect(() => {
           justifyContent: 'center',
           fontFamily: "'Cormorant Garamond', serif",
           color: '#8B1E2D',
-          fontSize: '1.18rem',
+          fontSize: '1.10rem',
           fontWeight: 600,
           whiteSpace: 'nowrap',
           textAlign: 'center'
@@ -1367,7 +1953,7 @@ useEffect(() => {
       style={{
         fontFamily: "'Great Vibes', cursive",
         color: '#9B1E35',
-        fontSize: '1.42rem',
+        fontSize: '1.36rem',
         lineHeight: 1.1,
         whiteSpace: 'nowrap'
       }}
