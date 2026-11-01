@@ -625,7 +625,7 @@ useEffect(() => {
           <p
             style={{
               letterSpacing: '2px',
-              fontSize: '0.85rem',
+              fontSize: '0.91rem',
               textTransform: 'uppercase',
               marginBottom: '40px',
               marginLeft: '30px',
@@ -667,7 +667,7 @@ useEffect(() => {
             aria-hidden="true"
             style={{
               position: 'absolute',
-              bottom: '24px',
+              bottom: '90px',
               left: '50%',
               transform: 'translateX(-50%)',
               zIndex: 40,
@@ -689,7 +689,7 @@ useEffect(() => {
                 fontWeight: 600
               }}
             >
-              SCROLL
+
             </div>
 
             <div
@@ -808,8 +808,8 @@ useEffect(() => {
     <span
       style={{
         display: 'block',
-        fontSize: '0.91rem',
-        color: '#412e25',
+        fontSize: '0.96rem',
+        color: '#2e1f1e',
         fontWeight: 400
       }}
     >
@@ -839,7 +839,7 @@ useEffect(() => {
       style={{
         display: 'block',
         fontSize: '0.91rem',
-        color: '#412e25',
+        color: '#2e1f1e',
         fontWeight: 400
       }}
     >
@@ -908,7 +908,7 @@ useEffect(() => {
       style={{
         display: 'block',
         fontSize: '0.91rem',
-        color: '#412e25',
+        color: '#2e1f1e',
         fontWeight: 400
       }}
     >
@@ -938,7 +938,7 @@ useEffect(() => {
       style={{
         display: 'block',
         fontSize: '0.91rem',
-        color: '#412e25',
+        color: '#2e1f1e',
         fontWeight: 400
       }}
     >
@@ -2178,7 +2178,7 @@ useEffect(() => {
 
       <p
         style={{
-          fontSize: '0.85rem',
+          fontSize: '0.91rem',
           color: '#6D5A50',
           margin: '10px 0 20px'
         }}
