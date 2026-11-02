@@ -994,18 +994,141 @@ useEffect(() => {
   </div>
 </div>
 
-      {/* 4. SAVE THE DATE (SCRATCH) */}
-      <div className="content-section" style={{ paddingTop: 0 }}>
-        <h2 className="font-cinzel" style={{ fontSize: '1.2rem', color: '#3B060E', marginBottom: '15px' }}>Save the date</h2>
-        
-        <div className="scratch-container">
-          <div style={{ zIndex: 1 }}>
-            <h3 className="font-script" style={{ fontSize: '2.4rem', color: '#8B1E2D', margin: 0 }}>26 November 2026</h3>
-            <p className="font-cinzel" style={{ fontSize: '0.85rem', letterSpacing: '2px', color: '#C5A059', margin: '5px 0' }}>THURSDAY • EVENING</p>
-          </div>
-          <canvas ref={canvasRef} className="scratch-canvas"></canvas>
+     {/* 4. SAVE THE DATE (SCRATCH) */}
+<div className="content-section" style={{ paddingTop: 0 }}>
+  <h2
+    className="font-cinzel"
+    style={{
+      fontSize: '1.2rem',
+      color: '#3B060E',
+      marginBottom: '15px'
+    }}
+  >
+    Save the date
+  </h2>
+
+  <div className="scratch-container">
+
+    {/* CONTENT REVEALED AFTER SCRATCHING */}
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: '20px',
+        boxSizing: 'border-box'
+      }}
+    >
+      <h3
+        className="font-script"
+        style={{
+          fontSize: '2.4rem',
+          color: '#8B1E2D',
+          margin: 0,
+          lineHeight: 1.1
+        }}
+      >
+        26 November 2026
+      </h3>
+
+      <p
+        className="font-cinzel"
+        style={{
+          fontSize: '0.85rem',
+          letterSpacing: '2px',
+          color: '#C5A059',
+          margin: '7px 0 12px'
+        }}
+      >
+        THURSDAY • EVENING
+      </p>
+
+      {/* TIMING */}
+      <div
+        style={{
+          marginTop: '5px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        {/* TIMING - subtle, below the date */}
+<div
+  style={{
+    marginTop: '14px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }}
+>
+  <div
+    style={{
+      width: '42px',
+      height: '1px',
+      background: '#D8BE88',
+      marginBottom: '9px'
+    }}
+  />
+
+  <div
+    style={{
+      fontFamily: "'Cormorant Garamond', serif",
+      fontSize: '1.15rem',
+      color: '#8B1E2D',
+      letterSpacing: '1.5px',
+      fontWeight: 600,
+      lineHeight: 1.1
+    }}
+  >
+    8 PM
+  </div>
+
+  <div
+    style={{
+      fontFamily: "'Cormorant Garamond', serif",
+      fontSize: '0.72rem',
+      color: '#A47B35',
+      letterSpacing: '3px',
+      marginTop: '3px',
+      fontStyle: 'italic',
+      textTransform: 'uppercase'
+    }}
+  >
+    onwards
+  </div>
+</div>
+
+        <div
+          style={{
+            marginTop: '10px',
+            color: '#C5A059',
+            fontSize: '11px',
+            letterSpacing: '4px'
+          }}
+        >
+          ✦ ❧ ✦
         </div>
       </div>
+    </div>
+
+    {/* SCRATCH LAYER */}
+    <canvas
+      ref={canvasRef}
+      className="scratch-canvas"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 2
+      }}
+    />
+
+  </div>
+</div>
 
       {/* 5. COUNTDOWN */}
       <div className="content-section" style={{ background: '#FAF2E6', borderTop: '1px solid #E8D3A7' }}>
