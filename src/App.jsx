@@ -420,7 +420,7 @@ useEffect(() => {
   let heartMode = false;
   let destroyed = false;
 
-  const PETAL_COUNT = 468;
+  const PETAL_COUNT = 768;
   const MAX_INTERACTIONS = 3;
 
   const random = (min, max) =>
@@ -528,57 +528,73 @@ ctx.lineWidth = 1.1;
   // HEART SHAPE — FINAL PETAL ARRANGEMENT
   // ----------------------------------------------------------
 
-  const arrangeHeart = () => {
-    heartMode = true;
+ 
+const arrangeHeart = () => {
+  heartMode = true;
 
-    const centerX = width / 2;
-    const centerY = height / 2;
+  // Smaller heart with safe margins on every side
+  const HEART_PETAL_COUNT = 164;
 
-   const heartWidth = Math.min(width * 0.94, 310);
-const heartHeight = Math.min(height * 1.02, 220);
+  const heartWidth = Math.min(width * 0.88, 290, width - 36);
+const heartHeight = Math.min(height * 0.88, 205, height - 36);
 
-    petals.forEach((p, i) => {
-      const t = (i / petals.length) * Math.PI * 2;
+const centerX = width / 2;
+const topY = (height - heartHeight) / 2;
 
-      // Mathematical heart curve
-      const hx = 16 * Math.pow(Math.sin(t), 3);
+  // Actual mathematical heart curve
+  // Its vertical range is approximately -17 to +5
+  petals.forEach((p, i) => {
+    if (i >= HEART_PETAL_COUNT) {
+      p.opacity = 0;
+      return;
+    }
 
-      const hy =
-        13 * Math.cos(t) -
-        5 * Math.cos(2 * t) -
-        2 * Math.cos(3 * t) -
-        Math.cos(4 * t);
+    const t =
+      (i / HEART_PETAL_COUNT) * Math.PI * 2;
 
-      const targetX =
-        centerX + (hx / 32) * heartWidth;
+    const hx = 16 * Math.pow(Math.sin(t), 3);
 
-      const targetY =
-        centerY - (hy / 30) * heartHeight;
+    const hy =
+      13 * Math.cos(t) -
+      5 * Math.cos(2 * t) -
+      2 * Math.cos(3 * t) -
+      Math.cos(4 * t);
 
-      // Direction of the heart curve
-      const nextT = t + 0.015;
+    const nextT = t + 0.025;
 
-      const nextX = 16 * Math.pow(Math.sin(nextT), 3);
+    const nextX =
+      16 * Math.pow(Math.sin(nextT), 3);
 
-      const nextY =
-        13 * Math.cos(nextT) -
-        5 * Math.cos(2 * nextT) -
-        2 * Math.cos(3 * nextT) -
-        Math.cos(4 * nextT);
+    const nextY =
+      13 * Math.cos(nextT) -
+      5 * Math.cos(2 * nextT) -
+      2 * Math.cos(3 * nextT) -
+      Math.cos(4 * nextT);
 
-      const angle = Math.atan2(
-        -(nextY - hy),
-        nextX - hx
-      );
+    // Normalize X and Y to the actual heart dimensions
+    const targetX =
+      centerX + (hx / 16) * (heartWidth / 2);
 
-      p.targetX = targetX + random(-2, 2);
-      p.targetY = targetY + random(-2, 2);
-      p.targetRotation = angle + Math.PI / 2;
-      p.scale = random(0.8, 1.12);
-    });
+    const targetY =
+      topY + ((5 - hy) / 22) * heartHeight;
 
-    startAnimation();
-  };
+    const angle = Math.atan2(
+      -(nextY - hy),
+      nextX - hx
+    );
+
+    p.targetX = targetX;
+    p.targetY = targetY;
+
+    p.targetRotation = angle + Math.PI / 2;
+
+    // Smaller petals create a cleaner heart outline
+    p.scale = random(0.65, 0.9);
+  });
+
+  startAnimation();
+};
+
 
   // ----------------------------------------------------------
   // PETALS SCATTER AWAY FROM THE TOUCH
@@ -1368,7 +1384,7 @@ const heartHeight = Math.min(height * 1.02, 220);
       marginBottom: '15px'
     }}
   >
-    Save the date
+    Swipe the petals away
   </h2>
 
   <div className="scratch-container">
@@ -1412,72 +1428,66 @@ const heartHeight = Math.min(height * 1.02, 220);
         THURSDAY • EVENING
       </p>
 
-      {/* TIMING */}
-      <div
-        style={{
-          marginTop: '5px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-      >
-        {/* TIMING - subtle, below the date */}
+   
+{/* TIMING */}
 <div
   style={{
-    marginTop: '14px',
+    marginTop: '5px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
   }}
 >
+  {/* TIMING - subtle, below the date */}
   <div
     style={{
-      width: '42px',
-      height: '1px',
-      background: '#D8BE88',
-      marginBottom: '9px'
-    }}
-  />
-
-  <div
-    style={{
-      fontFamily: "'Cormorant Garamond', serif",
-      fontSize: '1.15rem',
-      color: '#8B1E2D',
-      letterSpacing: '1.5px',
-      fontWeight: 600,
-      lineHeight: 1.1
+      marginTop: '1px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     }}
   >
-    8 PM
+    <div
+      style={{
+        width: '42px',
+        height: '1px',
+        background: '#D8BE88',
+        marginBottom: '9px',
+        marginTop: '-12px'
+      }}
+    />
+
+    <div
+      style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: '1.15rem',
+        color: '#8B1E2D',
+        letterSpacing: '1.5px',
+        fontWeight: 600,
+        lineHeight: 1.1
+      }}
+    >
+      8 PM
+    </div>
+
+    <div
+      style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: '0.72rem',
+        color: '#A47B35',
+        letterSpacing: '3px',
+        marginTop: '3px',
+        fontStyle: 'italic',
+        textTransform: 'uppercase'
+      }}
+    >
+      onwards
+    </div>
   </div>
 
-  <div
-    style={{
-      fontFamily: "'Cormorant Garamond', serif",
-      fontSize: '0.72rem',
-      color: '#A47B35',
-      letterSpacing: '3px',
-      marginTop: '3px',
-      fontStyle: 'italic',
-      textTransform: 'uppercase'
-    }}
-  >
-    onwards
-  </div>
+  <div style={{ height: '10px' }} />
 </div>
 
-        <div
-          style={{
-            marginTop: '10px',
-            color: '#C5A059',
-            fontSize: '11px',
-            letterSpacing: '4px'
-          }}
-        >
-          ✦ ❧ ✦
-        </div>
-      </div>
     </div>
 
     {/* SCRATCH LAYER */}
