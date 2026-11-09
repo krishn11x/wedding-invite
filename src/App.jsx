@@ -161,325 +161,242 @@ useEffect(() => {
   };
 }, [isMuted]);
 
-  // ============================================================
-  // FULL PAGE SCROLL HINT AFTER OPENING
-  // ============================================================
-  //
-  // This scrolls the ACTUAL PAGE using window.scrollTo().
-  // It does NOT transform only the hero section.
-  //
-  // Sequence:
-  // 1. Door opens
-  // 2. Wait for opening animation
-  // 3. Whole page moves down ~10%
-  // 4. Returns
-  // 5. Moves down again
-  // 6. Returns
-  //
-  // This visually tells the guest that the invitation is scrollable.
-  // ============================================================
+ // ============================================================
+// SMART AUTO SCROLL - SKIP IF USER SCROLLS MANUALLY
+// ============================================================
 
-  useEffect(() => {
-    if (!isOpened) return;
+useEffect(() => {
+  if (!isOpened) return;
 
-    let cancelled = false;
-    const timers = [];
-    const animationFrames = [];
+  const scroller = document.querySelector('.app-frame');
+  const hero = scroller?.querySelector('.hero-section');
+  const nextSection = hero?.nextElementSibling;
 
-    const smoothScroll = (targetY, duration = 900) => {
-      if (cancelled) return;
+  if (!scroller || !hero || !nextSection) return;
 
-      const startY = window.scrollY;
-      const distance = targetY - startY;
-      const startTime = performance.now();
+  let cancelled = false;
+  let userHasScrolled = false;
+  let autoScrollStarted = false;
 
-      const animate = (currentTime) => {
-        if (cancelled) return;
+  let animationFrame = null;
+  let startTimer = null;
+  let holdTimer = null;
+  let touchStartY = null;
 
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(
-          elapsed / duration,
-          1
-        );
+  const originalBehavior = scroller.style.scrollBehavior;
+  scroller.style.scrollBehavior = 'auto';
 
-        // Smooth ease-in-out
-        const eased =
-          progress < 0.5
-            ? 2 * progress * progress
-            : 1 -
-              Math.pow(
-                -2 * progress + 2,
-                2
-              ) / 2;
+  const originalScrollTop = scroller.scrollTop;
 
-        window.scrollTo(
-          0,
-          startY + distance * eased
-        );
+  // Calculate where the next section should appear
+  const containerRect = scroller.getBoundingClientRect();
+  const sectionRect = nextSection.getBoundingClientRect();
 
-        if (progress < 1) {
-          const frame =
-            requestAnimationFrame(animate);
+  const sectionTop =
+    scroller.scrollTop +
+    sectionRect.top -
+    containerRect.top;
 
-          animationFrames.push(frame);
+  const targetScrollTop =
+    sectionTop - scroller.clientHeight * 0.50;
+
+  const maxScroll =
+    scroller.scrollHeight - scroller.clientHeight;
+
+  const finalTarget = Math.max(
+    0,
+    Math.min(targetScrollTop, maxScroll)
+  );
+
+  // Cancel automatic animation whenever user takes control
+  const takeManualControl = () => {
+    if (userHasScrolled || cancelled) return;
+
+    userHasScrolled = true;
+
+    clearTimeout(startTimer);
+    clearTimeout(holdTimer);
+
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+  };
+
+  // Detect mouse wheel / trackpad scrolling
+  const handleWheel = (e) => {
+    if (Math.abs(e.deltaY) > 4) {
+      takeManualControl();
+    }
+  };
+
+  // Detect touch gestures on mobile
+  const handleTouchStart = (e) => {
+    touchStartY = e.touches[0]?.clientY ?? null;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartY === null) return;
+
+    const currentY = e.touches[0]?.clientY;
+
+    if (currentY === undefined) return;
+
+    const movement = Math.abs(currentY - touchStartY);
+
+    if (movement > 10) {
+      takeManualControl();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartY = null;
+  };
+
+  // Detect keyboard scrolling
+  const handleKeyDown = (e) => {
+    const scrollKeys = [
+      'ArrowDown',
+      'ArrowUp',
+      'PageDown',
+      'PageUp',
+      ' ',
+      'Home',
+      'End'
+    ];
+
+    if (!scrollKeys.includes(e.key)) return;
+
+    const target = e.target;
+
+    if (
+      target instanceof HTMLElement &&
+      target.closest('input, textarea, select, [contenteditable="true"]')
+    ) {
+      return;
+    }
+
+    takeManualControl();
+  };
+
+  // Detect scrollbar dragging / native scrolling
+  const handleScroll = () => {
+    if (autoScrollStarted || userHasScrolled) return;
+
+    if (
+      Math.abs(scroller.scrollTop - originalScrollTop) > 5
+    ) {
+      takeManualControl();
+    }
+  };
+
+  // Attach user interaction listeners
+  scroller.addEventListener('wheel', handleWheel, {
+    passive: true
+  });
+
+  scroller.addEventListener('touchstart', handleTouchStart, {
+    passive: true
+  });
+
+  scroller.addEventListener('touchmove', handleTouchMove, {
+    passive: true
+  });
+
+  scroller.addEventListener('touchend', handleTouchEnd);
+
+  scroller.addEventListener('scroll', handleScroll, {
+    passive: true
+  });
+
+  window.addEventListener('keydown', handleKeyDown);
+
+  // Smooth scrolling function
+  const smoothScroll = (target, duration, onComplete) => {
+    if (cancelled || userHasScrolled) return;
+
+    const start = scroller.scrollTop;
+    const distance = target - start;
+    const startTime = performance.now();
+
+    const animate = (currentTime) => {
+      if (cancelled || userHasScrolled) return;
+
+      const progress = Math.min(
+        (currentTime - startTime) / duration,
+        1
+      );
+
+      const eased =
+        progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      scroller.scrollTop =
+        start + distance * eased;
+
+      if (progress < 1) {
+        animationFrame =
+          requestAnimationFrame(animate);
+      } else {
+        animationFrame = null;
+
+        if (onComplete && !cancelled && !userHasScrolled) {
+          onComplete();
         }
-      };
-
-      const frame =
-        requestAnimationFrame(animate);
-
-      animationFrames.push(frame);
+      }
     };
 
-    // Give the door-opening animation enough time to finish.
-    const startTimer = setTimeout(() => {
-      if (cancelled) return;
+    animationFrame = requestAnimationFrame(animate);
+  };
 
-      const originalY = window.scrollY;
+  // Wait before triggering automatic scrolling
+  startTimer = setTimeout(() => {
+    if (cancelled || userHasScrolled) return;
 
-      // Around 10% of the viewport height.
-      // Minimum 70px so it is also noticeable on small screens.
-      const moveAmount = Math.max(
-        window.innerHeight * 0.10,
-        70
-      );
+    autoScrollStarted = true;
 
-      // FIRST movement
-      smoothScroll(
-        originalY + moveAmount,
-        1000
-      );
+    // Reveal the next section
+    smoothScroll(finalTarget, 1050, () => {
 
-      // Return to original position
-      timers.push(
-        setTimeout(() => {
-          if (cancelled) return;
+      if (cancelled || userHasScrolled) return;
 
-          smoothScroll(
-            originalY,
-            900
-          );
-        }, 1150)
-      );
+      // Keep next section visible for 0.5 seconds
+      holdTimer = setTimeout(() => {
 
-      // SECOND movement
-      timers.push(
-        setTimeout(() => {
-          if (cancelled) return;
+        if (cancelled || userHasScrolled) return;
 
-          smoothScroll(
-            originalY + moveAmount * 0.85,
-            900
-          );
-        }, 2250)
-      );
+        // Return smoothly to the hero section
+        smoothScroll(originalScrollTop, 1050);
 
-      // Final return
-      timers.push(
-        setTimeout(() => {
-          if (cancelled) return;
+      }, 100);
+    });
 
-          smoothScroll(
-            originalY,
-            900
-          );
-        }, 3350)
-      );
-    }, 1400);
+  }, 2000);
 
-    timers.push(startTimer);
+  // Cleanup
+  return () => {
+    cancelled = true;
 
-    return () => {
-      cancelled = true;
+    clearTimeout(startTimer);
+    clearTimeout(holdTimer);
 
-      timers.forEach((timer) => {
-        clearTimeout(timer);
-      });
-
-      animationFrames.forEach((frame) => {
-        cancelAnimationFrame(frame);
-      });
-    };
-  }, [isOpened]);
-
-  // Lock page scrolling until the invitation is opened
-  useEffect(() => {
-    document.body.style.overflow =
-      isOpened ? 'auto' : 'hidden';
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpened]);
-
-  // ============================================================
-  // SCRATCH TO REVEAL CANVAS LOGIC
-  // ============================================================
-
-  useEffect(() => {
-    if (!isOpened || !canvasRef.current) {
-      return;
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
     }
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    scroller.removeEventListener('wheel', handleWheel);
+    scroller.removeEventListener('touchstart', handleTouchStart);
+    scroller.removeEventListener('touchmove', handleTouchMove);
+    scroller.removeEventListener('touchend', handleTouchEnd);
+    scroller.removeEventListener('scroll', handleScroll);
 
-    if (!ctx || !canvas.parentElement) {
-      return;
-    }
+    window.removeEventListener('keydown', handleKeyDown);
 
-    const rect =
-      canvas.parentElement.getBoundingClientRect();
+    scroller.style.scrollBehavior = originalBehavior;
+  };
 
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-
-    // Fill with rose magenta
-    ctx.fillStyle = '#C53051';
-
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    // Draw text overlay
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '600 12px Montserrat';
-    ctx.textAlign = 'center';
-
-    ctx.fillText(
-      'SWIPE THE PETALS AWAY',
-      canvas.width / 2,
-      canvas.height / 2 + 5
-    );
-
-    let isScratching = false;
-
-    const getPos = (e) => {
-      const bounds =
-        canvas.getBoundingClientRect();
-
-      const clientX = e.touches
-        ? e.touches[0].clientX
-        : e.clientX;
-
-      const clientY = e.touches
-        ? e.touches[0].clientY
-        : e.clientY;
-
-      return {
-        x: clientX - bounds.left,
-        y: clientY - bounds.top
-      };
-    };
-
-    const scratch = (e) => {
-      if (!isScratching) return;
-
-      const { x, y } = getPos(e);
-
-      ctx.globalCompositeOperation =
-        'destination-out';
-
-      ctx.beginPath();
-
-      ctx.arc(
-        x,
-        y,
-        28,
-        0,
-        Math.PI * 2
-      );
-
-      ctx.fill();
-    };
-
-    const start = (e) => {
-      isScratching = true;
-      scratch(e);
-    };
-
-    const stop = () => {
-      isScratching = false;
-    };
-
-    canvas.addEventListener(
-      'mousedown',
-      start
-    );
-
-    canvas.addEventListener(
-      'mousemove',
-      scratch
-    );
-
-    canvas.addEventListener(
-      'mouseup',
-      stop
-    );
-
-    canvas.addEventListener(
-      'mouseleave',
-      stop
-    );
-
-    canvas.addEventListener(
-      'touchstart',
-      start,
-      { passive: true }
-    );
-
-    canvas.addEventListener(
-      'touchmove',
-      scratch,
-      { passive: true }
-    );
-
-    canvas.addEventListener(
-      'touchend',
-      stop
-    );
-
-    // Proper cleanup
-    return () => {
-      canvas.removeEventListener(
-        'mousedown',
-        start
-      );
-
-      canvas.removeEventListener(
-        'mousemove',
-        scratch
-      );
-
-      canvas.removeEventListener(
-        'mouseup',
-        stop
-      );
-
-      canvas.removeEventListener(
-        'mouseleave',
-        stop
-      );
-
-      canvas.removeEventListener(
-        'touchstart',
-        start
-      );
-
-      canvas.removeEventListener(
-        'touchmove',
-        scratch
-      );
-
-      canvas.removeEventListener(
-        'touchend',
-        stop
-      );
-    };
-  }, [isOpened]);
+}, [isOpened]);
 
   return (
     <div className="app-frame">
@@ -543,13 +460,14 @@ useEffect(() => {
           HERO / FRONT PAGE
       ====================================================== */}
 
-      <div className="hero-section">
+      <div className="hero-section" id="hero-section">
 
         {/* ==================================================
             GANESH JI + MANTRA
         ================================================== */}
 
         <div
+        
           style={{
             position: 'absolute',
             top: '145px',
@@ -561,6 +479,7 @@ useEffect(() => {
             flexDirection: 'column',
             alignItems: 'center'
           }}
+        
         >
 
           <img
@@ -667,7 +586,7 @@ useEffect(() => {
             aria-hidden="true"
             style={{
               position: 'absolute',
-              bottom: '90px',
+              bottom: '135px',
               left: '50%',
               transform: 'translateX(-50%)',
               zIndex: 40,
@@ -787,6 +706,20 @@ useEffect(() => {
     marginBottom: '18px'
   }}
 >
+ <p
+  style={{
+    fontFamily: "'Alex Brush', cursive",
+    fontSize: '2.7rem',
+    color: '#8B1E2D',
+    margin: '0 0 8px',
+    textAlign: 'center',
+    lineHeight: 1.2
+  }}
+>
+  <span style={{ marginRight: '12px' }}>Aanchal</span>
+  <span>Gupta</span>
+</p>
+
   {/* GRANDDAUGHTER */}
   <p style={{ margin: '10px 0' }}>
     <b
@@ -886,6 +819,20 @@ useEffect(() => {
     />
   </div>
 
+<p
+  style={{
+    fontFamily: "'Alex Brush', cursive",
+    fontSize: '2.7rem',
+    color: '#8B1E2D',
+    margin: '0 0 8px',
+    textAlign: 'center',
+    lineHeight: 1.2
+  }}
+>
+  <span style={{ marginRight: '12px' }}>Harshit</span>
+  <span>Aggarwal</span>
+</p>
+
   {/* GRANDSON */}
   <p style={{ margin: '10px 0' }}>
     <b
@@ -959,16 +906,6 @@ useEffect(() => {
   With love,
 </p>
 
-<p
-  className="font-script"
-  style={{
-    fontSize: '1.65rem',
-    color: '#8B1E2D',
-    margin: '0 0 8px'
-  }}
->
-  Aanchal & Harshit
-</p>
 
 <p
   className="font-body"
