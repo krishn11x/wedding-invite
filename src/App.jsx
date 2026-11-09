@@ -419,9 +419,10 @@ useEffect(() => {
   let lastPoint = null;
   let heartMode = false;
   let destroyed = false;
+  let hasSwiped = false;
 
   const PETAL_COUNT = 768;
-  const MAX_INTERACTIONS = 3;
+  const MAX_INTERACTIONS = 2;
 
   const random = (min, max) =>
     Math.random() * (max - min) + min;
@@ -750,64 +751,81 @@ const topY = (height - heartHeight) / 2;
   // One complete tap/swipe = one interaction.
   // ----------------------------------------------------------
 
-  const getPoint = (e) => {
-    const rect = canvas.getBoundingClientRect();
+  
+const getPoint = (e) => {
+  const rect = canvas.getBoundingClientRect();
 
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
   };
+};
 
-  const handlePointerDown = (e) => {
-    if (heartMode) return;
+const handlePointerDown = (e) => {
+  if (heartMode) return;
 
-    e.preventDefault();
+  e.preventDefault();
 
-    pointerDown = true;
-    lastPoint = getPoint(e);
+  pointerDown = true;
+  hasSwiped = false;
+  lastPoint = getPoint(e);
 
-    canvas.setPointerCapture(e.pointerId);
-  };
+  canvas.setPointerCapture(e.pointerId);
+};
 
-  const handlePointerMove = (e) => {
-    if (!pointerDown || heartMode) return;
+const handlePointerMove = (e) => {
+  if (!pointerDown || heartMode) return;
 
-    e.preventDefault();
+  e.preventDefault();
 
-    const point = getPoint(e);
+  const point = getPoint(e);
 
-    // Keep the effect responsive during a swipe
-    if (
-      !lastPoint ||
-      Math.hypot(
+  const distance = lastPoint
+    ? Math.hypot(
         point.x - lastPoint.x,
         point.y - lastPoint.y
-      ) > 12
-    ) {
-      lastPoint = point;
-    }
-  };
+      )
+    : 0;
 
-  const handlePointerUp = (e) => {
-    if (!pointerDown || heartMode) return;
+  // Move petals continuously while swiping
+  if (distance >= 14) {
+    hasSwiped = true;
 
-    pointerDown = false;
+    scatterPetals(point);
 
-    const point = getPoint(e);
+    lastPoint = point;
+  }
+};
 
-    interactionCount++;
+const handlePointerUp = (e) => {
+  if (!pointerDown || heartMode) return;
 
-    if (interactionCount >= MAX_INTERACTIONS) {
-      arrangeHeart();
-    } else {
-      scatterPetals(point);
-    }
-  };
+  pointerDown = false;
 
-  const handlePointerCancel = () => {
-    pointerDown = false;
-  };
+  const point = getPoint(e);
+
+  // A simple tap still scatters nearby petals
+  if (!hasSwiped) {
+    scatterPetals(point);
+  }
+
+  // One complete tap or swipe = one interaction
+  interactionCount++;
+
+  if (interactionCount >= MAX_INTERACTIONS) {
+    arrangeHeart();
+  }
+
+  lastPoint = null;
+  hasSwiped = false;
+};
+
+const handlePointerCancel = () => {
+  pointerDown = false;
+  hasSwiped = false;
+  lastPoint = null;
+};
+
 
   // ----------------------------------------------------------
   // INITIALIZE
