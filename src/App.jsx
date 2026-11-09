@@ -398,6 +398,433 @@ useEffect(() => {
 
 }, [isOpened]);
 
+// ============================================================
+// ROSE PETAL SCRATCH → SCATTER → HEART REVEAL
+// ============================================================
+
+useEffect(() => {
+  if (!isOpened || !canvasRef.current) return;
+
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let petals = [];
+  let animationFrame = null;
+  let interactionCount = 0;
+  let pointerDown = false;
+  let lastPoint = null;
+  let heartMode = false;
+  let destroyed = false;
+
+  const PETAL_COUNT = 468;
+  const MAX_INTERACTIONS = 3;
+
+  const random = (min, max) =>
+    Math.random() * (max - min) + min;
+
+  const clamp = (value, min, max) =>
+    Math.max(min, Math.min(max, value));
+
+  // ----------------------------------------------------------
+  // CREATE NATURAL ROSE PETAL
+  // ----------------------------------------------------------
+
+  const createPetal = (x, y) => ({
+    x,
+    y,
+    rotation: random(0, Math.PI * 2),
+    scale: random(0.75, 1.2),
+    opacity: random(0.94, 1),
+    hue: random(-5, 8),
+
+    targetX: x,
+    targetY: y,
+    targetRotation: random(0, Math.PI * 2),
+
+    vx: 0,
+    vy: 0
+  });
+
+  // ----------------------------------------------------------
+  // DRAW ONE INDIVIDUAL PETAL
+  // ----------------------------------------------------------
+
+  const drawPetal = (p) => {
+    ctx.save();
+
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.scale(p.scale, p.scale);
+
+    ctx.globalAlpha = p.opacity;
+
+   const gradient = ctx.createLinearGradient(-8, -13, 9, 13);
+
+gradient.addColorStop(0, '#FFB2C2');
+gradient.addColorStop(0.18, '#F75B88');
+gradient.addColorStop(0.42, '#E91E63');
+gradient.addColorStop(0.68, '#C2185B');
+gradient.addColorStop(0.88, '#941044');
+gradient.addColorStop(1, '#650B30');
+
+    ctx.fillStyle = gradient;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -13);
+
+    ctx.bezierCurveTo(
+      11, -7,
+      12, 5,
+      0, 13
+    );
+
+    ctx.bezierCurveTo(
+      -12, 5,
+      -11, -7,
+      0, -13
+    );
+
+    ctx.fill();
+
+    // Soft highlight
+    ctx.strokeStyle = 'rgba(255, 235, 240, 0.85)';
+ctx.lineWidth = 1.1;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -9);
+    ctx.quadraticCurveTo(2, 1, 0, 10);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  // ----------------------------------------------------------
+  // INITIAL PETALS — NATURAL, UNEVEN COVERAGE
+  // Some date details remain visible through gaps.
+  // ----------------------------------------------------------
+
+  const createInitialPetals = () => {
+    petals = [];
+
+    for (let i = 0; i < PETAL_COUNT; i++) {
+      const x = random(5, width - 5);
+      const y = random(5, height - 5);
+
+      const p = createPetal(x, y);
+
+      // More natural, overlapping scatter
+      p.rotation = random(-Math.PI, Math.PI);
+      p.scale = random(0.72, 1.15);
+
+      petals.push(p);
+    }
+  };
+
+  // ----------------------------------------------------------
+  // HEART SHAPE — FINAL PETAL ARRANGEMENT
+  // ----------------------------------------------------------
+
+  const arrangeHeart = () => {
+    heartMode = true;
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+   const heartWidth = Math.min(width * 0.94, 310);
+const heartHeight = Math.min(height * 1.02, 220);
+
+    petals.forEach((p, i) => {
+      const t = (i / petals.length) * Math.PI * 2;
+
+      // Mathematical heart curve
+      const hx = 16 * Math.pow(Math.sin(t), 3);
+
+      const hy =
+        13 * Math.cos(t) -
+        5 * Math.cos(2 * t) -
+        2 * Math.cos(3 * t) -
+        Math.cos(4 * t);
+
+      const targetX =
+        centerX + (hx / 32) * heartWidth;
+
+      const targetY =
+        centerY - (hy / 30) * heartHeight;
+
+      // Direction of the heart curve
+      const nextT = t + 0.015;
+
+      const nextX = 16 * Math.pow(Math.sin(nextT), 3);
+
+      const nextY =
+        13 * Math.cos(nextT) -
+        5 * Math.cos(2 * nextT) -
+        2 * Math.cos(3 * nextT) -
+        Math.cos(4 * nextT);
+
+      const angle = Math.atan2(
+        -(nextY - hy),
+        nextX - hx
+      );
+
+      p.targetX = targetX + random(-2, 2);
+      p.targetY = targetY + random(-2, 2);
+      p.targetRotation = angle + Math.PI / 2;
+      p.scale = random(0.8, 1.12);
+    });
+
+    startAnimation();
+  };
+
+  // ----------------------------------------------------------
+  // PETALS SCATTER AWAY FROM THE TOUCH
+  // ----------------------------------------------------------
+
+  const scatterPetals = (point) => {
+    const nearby = petals
+      .map((p, index) => ({
+        p,
+        index,
+        distance: Math.hypot(
+          p.x - point.x,
+          p.y - point.y
+        )
+      }))
+      .filter(item => item.distance < 62)
+      .sort((a, b) => a.distance - b.distance);
+
+    // A tap should still move nearby petals
+    const selected = nearby.length
+      ? nearby.slice(0, 12)
+      : petals
+          .map((p, index) => ({
+            p,
+            index,
+            distance: Math.hypot(
+              p.x - point.x,
+              p.y - point.y
+            )
+          }))
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, 5);
+
+    selected.forEach(({ p }) => {
+      const angle = Math.atan2(
+        p.y - point.y,
+        p.x - point.x
+      ) + random(-0.8, 0.8);
+
+      const distance = random(28, 85);
+
+      p.targetX = clamp(
+        p.x + Math.cos(angle) * distance,
+        8,
+        width - 8
+      );
+
+      p.targetY = clamp(
+        p.y + Math.sin(angle) * distance,
+        8,
+        height - 8
+      );
+
+      p.targetRotation =
+        p.rotation + random(-2.5, 2.5);
+    });
+
+    startAnimation();
+  };
+
+  // ----------------------------------------------------------
+  // ANIMATION ENGINE
+  // ----------------------------------------------------------
+
+  const render = () => {
+    if (destroyed) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    let stillMoving = false;
+
+    petals.forEach(p => {
+      const dx = p.targetX - p.x;
+      const dy = p.targetY - p.y;
+      const dr = p.targetRotation - p.rotation;
+
+      // Smooth, independent petal movement
+      p.x += dx * 0.085;
+      p.y += dy * 0.085;
+      p.rotation += dr * 0.085;
+
+      if (
+        Math.abs(dx) > 0.35 ||
+        Math.abs(dy) > 0.35 ||
+        Math.abs(dr) > 0.01
+      ) {
+        stillMoving = true;
+      }
+
+      drawPetal(p);
+    });
+
+    if (stillMoving) {
+      animationFrame = requestAnimationFrame(render);
+    } else {
+      animationFrame = null;
+    }
+  };
+
+  const startAnimation = () => {
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+    }
+
+    animationFrame = requestAnimationFrame(render);
+  };
+
+  // ----------------------------------------------------------
+  // RESIZE CANVAS
+  // ----------------------------------------------------------
+
+  const resizeCanvas = () => {
+    const rect = canvas.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) return;
+
+    const oldWidth = width;
+    const oldHeight = height;
+
+    width = rect.width;
+    height = rect.height;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    if (!petals.length || !oldWidth || !oldHeight) {
+      createInitialPetals();
+    } else {
+      const scaleX = width / oldWidth;
+      const scaleY = height / oldHeight;
+
+      petals.forEach(p => {
+        p.x *= scaleX;
+        p.y *= scaleY;
+        p.targetX *= scaleX;
+        p.targetY *= scaleY;
+      });
+    }
+
+    if (heartMode) {
+      arrangeHeart();
+    } else {
+      render();
+    }
+  };
+
+  // ----------------------------------------------------------
+  // POINTER INTERACTION
+  // One complete tap/swipe = one interaction.
+  // ----------------------------------------------------------
+
+  const getPoint = (e) => {
+    const rect = canvas.getBoundingClientRect();
+
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  };
+
+  const handlePointerDown = (e) => {
+    if (heartMode) return;
+
+    e.preventDefault();
+
+    pointerDown = true;
+    lastPoint = getPoint(e);
+
+    canvas.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!pointerDown || heartMode) return;
+
+    e.preventDefault();
+
+    const point = getPoint(e);
+
+    // Keep the effect responsive during a swipe
+    if (
+      !lastPoint ||
+      Math.hypot(
+        point.x - lastPoint.x,
+        point.y - lastPoint.y
+      ) > 12
+    ) {
+      lastPoint = point;
+    }
+  };
+
+  const handlePointerUp = (e) => {
+    if (!pointerDown || heartMode) return;
+
+    pointerDown = false;
+
+    const point = getPoint(e);
+
+    interactionCount++;
+
+    if (interactionCount >= MAX_INTERACTIONS) {
+      arrangeHeart();
+    } else {
+      scatterPetals(point);
+    }
+  };
+
+  const handlePointerCancel = () => {
+    pointerDown = false;
+  };
+
+  // ----------------------------------------------------------
+  // INITIALIZE
+  // ----------------------------------------------------------
+
+  const observer = new ResizeObserver(resizeCanvas);
+
+  observer.observe(canvas);
+
+  canvas.addEventListener('pointerdown', handlePointerDown);
+  canvas.addEventListener('pointermove', handlePointerMove);
+  canvas.addEventListener('pointerup', handlePointerUp);
+  canvas.addEventListener('pointercancel', handlePointerCancel);
+
+  resizeCanvas();
+
+  return () => {
+    destroyed = true;
+
+    observer.disconnect();
+
+    canvas.removeEventListener('pointerdown', handlePointerDown);
+    canvas.removeEventListener('pointermove', handlePointerMove);
+    canvas.removeEventListener('pointerup', handlePointerUp);
+    canvas.removeEventListener('pointercancel', handlePointerCancel);
+
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+    }
+  };
+
+}, [isOpened]);
+
   return (
     <div className="app-frame">
 
