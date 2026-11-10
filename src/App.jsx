@@ -532,6 +532,8 @@ ctx.lineWidth = 1.1;
  
 const arrangeHeart = () => {
   heartMode = true;
+    // Allow normal page scrolling after heart formation
+  canvas.style.pointerEvents = 'none';
 
   // Smaller heart with safe margins on every side
   const HEART_PETAL_COUNT = 164;
