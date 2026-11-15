@@ -1541,7 +1541,7 @@ const handlePointerCancel = () => {
       <div className="content-section">
         <h2 className="font-script" style={{ fontSize: '2.6rem', color: '#8B1E2D', marginBottom: '20px' }}>The celebrations</h2>
         
-       {/* <div className="event-card haldi-card">
+       { <div className="event-card haldi-card">
           <img src={assets.haldi} alt="Haldi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>UP NEXT</span>
@@ -1550,9 +1550,9 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Yellow tones</span>
           </div>
-        </div> */}
+        </div> }
 
-        {/* <div className="event-card mehendi-card">
+        { <div className="event-card mehendi-card">
           <img src={assets.mehendi} alt="Mehendi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>CEREMONY</span>
@@ -1561,7 +1561,7 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Greens & Florals</span>
           </div>
-        </div> */}
+        </div>}
 
         <div className="event-card wedding-card" style={{ border: '2px solid #C5A059' }}>
   <img src={assets.wedding} alt="Wedding" />
