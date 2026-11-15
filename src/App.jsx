@@ -1541,7 +1541,7 @@ const handlePointerCancel = () => {
       <div className="content-section">
         <h2 className="font-script" style={{ fontSize: '2.6rem', color: '#8B1E2D', marginBottom: '20px' }}>The celebrations</h2>
         
-        <div className="event-card">
+       {/* <div className="event-card haldi-card">
           <img src={assets.haldi} alt="Haldi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>UP NEXT</span>
@@ -1550,9 +1550,9 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Yellow tones</span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="event-card">
+        {/* <div className="event-card mehendi-card">
           <img src={assets.mehendi} alt="Mehendi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>CEREMONY</span>
@@ -1561,13 +1561,13 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Greens & Florals</span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="event-card" style={{ border: '2px solid #C5A059' }}>
+        <div className="event-card wedding-card" style={{ border: '2px solid #C5A059' }}>
           <img src={assets.wedding} alt="Wedding" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#C5A059', fontWeight: 'bold', letterSpacing: '1px' }}>MAIN EVENT</span>
-            <h3 className="font-cinzel" style={{ fontSize: '1.2rem', color: '#3B060E', margin: '2px 0 5px' }}>Wedding Pheras</h3>
+            <h3 className="font-cinzel" style={{ fontSize: '1.07rem', color: '#3B060E', margin: '2px 0 5px' }}>The Wedding Ceremony</h3>
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: 0 }}>Thu, 26 Nov • Evening</p>
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Royal Pepper, Peeragarhi</p>
             <span style={{ fontSize: '0.7rem', color: '#8B1E2D' }}><i className="fa-solid fa-shirt"></i> Ethnic Glam</span>
@@ -1615,7 +1615,63 @@ const handlePointerCancel = () => {
   Royal Pepper, Peeragarhi
 </h4>
         
-        <iframe title="Map" width="100%" height="180" style={{ border: '1px solid #E8D3A7', borderRadius: '12px', margin: '15px 0' }} src="https://maps.google.com/maps?q=28.6798,77.0920&hl=en&z=15&output=embed" allowFullScreen></iframe>
+        <div
+  style={{
+    position: 'relative',
+    width: '100%',
+    height: '180px',
+    margin: '15px 0',
+    border: '1px solid #E8D3A7',
+    borderRadius: '12px',
+    overflow: 'hidden'
+  }}
+>
+  <iframe
+    title="Map"
+    width="100%"
+    height="100%"
+    style={{
+      border: 0,
+      filter: 'blur(1px)',
+      transform: 'scale(1.02)'
+    }}
+    src="https://maps.google.com/maps?q=28.6798,77.0920&hl=en&z=15&output=embed"
+    allowFullScreen
+  />
+
+  <a
+    href="https://www.google.com/maps/search/?api=1&query=28.6798,77.0920"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      position: 'absolute',
+      inset: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textDecoration: 'none',
+      zIndex: 2,
+      background: 'rgba(255, 248, 235, 0.12)'
+    }}
+  >
+    <span
+      style={{
+        padding: '10px 22px',
+        borderRadius: '30px',
+        background: 'rgba(255, 250, 240, 0.88)',
+        border: '1px solid rgba(197, 160, 89, 0.7)',
+        color: '#8B1E2D',
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: '15px',
+        letterSpacing: '3px',
+        fontWeight: 600,
+        boxShadow: '0 3px 12px rgba(0,0,0,0.10)'
+      }}
+    >
+      TAP TO NAVIGATE
+    </span>
+  </a>
+</div>
         
         
 {/* VENUE ACTION BUTTONS */}

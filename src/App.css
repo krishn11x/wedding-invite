@@ -231,3 +231,26 @@
   box-shadow: none !important;
   border-radius: 0 !important;
 }
+/* Soft but visible ceremony card tints */
+.haldi-card {
+  background: linear-gradient(
+    125deg,
+    #F8E8C9 0%,
+    #F5DFD0 45%,
+    #F0D5D1 75%,
+    #F6E2C1 100%
+  ) !important;
+
+  border: 1px solid #E8D2B8 !important;
+  box-shadow: 0 4px 15px rgba(170, 105, 75, 0.06) !important;
+}
+
+/* .mehendi-card {
+  background: linear-gradient(135deg, #8a9968, #F8F8ED) !important;
+  border-color: #CDD8B5 !important;
+} */
+
+.wedding-card {
+  background: linear-gradient(135deg, #F7E5E8, #FDF3F3) !important;
+  border-color: #bb6e7b !important;
+}
