@@ -1564,15 +1564,31 @@ const handlePointerCancel = () => {
         </div> */}
 
         <div className="event-card wedding-card" style={{ border: '2px solid #C5A059' }}>
-          <img src={assets.wedding} alt="Wedding" />
-          <div>
-            <span style={{ fontSize: '0.65rem', color: '#C5A059', fontWeight: 'bold', letterSpacing: '1px' }}>MAIN EVENT</span>
-            <h3 className="font-cinzel" style={{ fontSize: '1.07rem', color: '#3B060E', margin: '2px 0 5px' }}>The Wedding Ceremony</h3>
-            <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: 0 }}>Thu, 26 Nov • Evening</p>
-            <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Royal Pepper, Peeragarhi</p>
-            <span style={{ fontSize: '0.7rem', color: '#8B1E2D' }}><i className="fa-solid fa-shirt"></i> Ethnic Glam</span>
-          </div>
-        </div>
+  <img src={assets.wedding} alt="Wedding" />
+  <div>
+    <span style={{ fontSize: '0.65rem', color: '#C5A059', fontWeight: 'bold', letterSpacing: '1px' }}>MAIN EVENT</span>
+
+    <h3 className="font-cinzel" style={{ fontSize: '1.07rem', color: '#3B060E', margin: '2px 0 5px' }}>
+      The Wedding Ceremony
+    </h3>
+
+    <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: 0 }}>
+      Thu, 26 Nov • Evening
+    </p>
+
+    <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 3px 0' }}>
+      Royal Pepper, Peeragarhi
+    </p>
+
+    <p style={{ fontSize: '0.8rem', color: '#8B1E2D', fontWeight: '600', margin: '0 0 5px 0' }}>
+      8 PM onwards
+    </p>
+
+    <span style={{ fontSize: '0.7rem', color: '#8B1E2D' }}>
+      <i className="fa-solid fa-shirt"></i> Ethnic Glam
+    </span>
+  </div>
+</div>
       </div>
 
       {/* 7. VENUE & GENUINE QR */}
