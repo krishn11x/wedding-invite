@@ -13,6 +13,7 @@ export default function App() {
 
   const audioRef = useRef(null);
   const canvasRef = useRef(null);
+  const heroPetalCanvasRef = useRef(null);
 
   const [showRsvp, setShowRsvp] = useState(false);
   const [rsvpName, setRsvpName] = useState('');
@@ -861,7 +862,305 @@ const handlePointerCancel = () => {
 
 }, [isOpened]);
 
+  // HERO ROSE PETAL SHOWER
+  
+  // ============================================================
+  // CINEMATIC ROSE PETAL SHOWER — HERO OPENING
+  // ============================================================
+
+  useEffect(() => {
+    if (!isOpened) return;
+
+    const canvas = heroPetalCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const hero = canvas.parentElement;
+
+    if (!ctx || !hero) return;
+
+    let width = 0;
+    let height = 0;
+    let petals = [];
+    let animationId = null;
+    let startTime = null;
+    let lastSpawn = 0;
+    let destroyed = false;
+
+    const SHOWER_DURATION = 5200;
+    const MAX_PETALS = 95;
+
+    const random = (min, max) =>
+      Math.random() * (max - min) + min;
+
+    const resizeCanvas = () => {
+      const rect = hero.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      width = rect.width;
+      height = rect.height;
+
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    // Each petal gets its own size, depth, shape and movement.
+    const createPetal = (initial = false) => {
+      const depth = random(0.65, 1.25);
+
+      return {
+        x: random(width * 0.04, width * 0.96),
+        y: initial ? random(-height * 0.65, -20) : -35,
+
+        size: random(9, 17) * depth,
+        depth,
+
+        rotation: random(-Math.PI, Math.PI),
+        rotationSpeed: random(-1.3, 1.3),
+
+        speedY: random(75, 145) * depth,
+        speedX: random(-28, 28),
+
+        sway: random(0, Math.PI * 2),
+        swaySpeed: random(1.1, 2.8),
+        swayAmount: random(12, 38),
+
+        flutter: random(0, Math.PI * 2),
+        flutterSpeed: random(3, 7),
+
+        opacity: random(0.76, 0.98),
+
+        color: [
+          '#74102C',
+          '#921438',
+          '#AD1747',
+          '#C42B59',
+          '#D7476C',
+          '#E36B83'
+        ][Math.floor(random(0, 6))]
+      };
+    };
+
+    // More organic rose petal shape with curved edges and vein.
+    const drawPetal = (p) => {
+      ctx.save();
+
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+
+      // Simulate the petal turning in the air.
+      const flutterScale =
+        0.35 + Math.abs(Math.cos(p.flutter)) * 0.65;
+
+      ctx.scale(flutterScale, 1);
+
+      ctx.globalAlpha = p.opacity;
+
+      const s = p.size;
+
+      // Soft shadow adds separation from the background.
+      ctx.shadowColor = 'rgba(75, 0, 25, 0.22)';
+      ctx.shadowBlur = 5 * p.depth;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 2;
+
+      const gradient = ctx.createLinearGradient(
+        -s * 0.8,
+        -s,
+        s * 0.8,
+        s
+      );
+
+      gradient.addColorStop(0, '#F49AAD');
+      gradient.addColorStop(0.18, '#DF5278');
+      gradient.addColorStop(0.43, p.color);
+      gradient.addColorStop(0.72, '#A20F43');
+      gradient.addColorStop(1, '#5C0928');
+
+      ctx.fillStyle = gradient;
+
+      ctx.beginPath();
+
+      ctx.moveTo(0, -s);
+
+      ctx.bezierCurveTo(
+        s * 0.35, -s * 0.95,
+        s * 1.05, -s * 0.48,
+        s * 0.82, s * 0.12
+      );
+
+      ctx.bezierCurveTo(
+        s * 0.65, s * 0.65,
+        s * 0.2, s * 0.95,
+        0, s
+      );
+
+      ctx.bezierCurveTo(
+        -s * 0.42, s * 0.82,
+        -s * 1.05, s * 0.28,
+        -s * 0.72, -s * 0.35
+      );
+
+      ctx.bezierCurveTo(
+        -s * 0.52, -s * 0.82,
+        -s * 0.2, -s * 0.98,
+        0, -s
+      );
+
+      ctx.closePath();
+      ctx.fill();
+
+      // Remove shadow before drawing fine details.
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+
+      // Natural central vein.
+      ctx.beginPath();
+      ctx.moveTo(0, -s * 0.78);
+      ctx.bezierCurveTo(
+        s * 0.12, -s * 0.15,
+        -s * 0.08, s * 0.4,
+        0, s * 0.78
+      );
+
+      ctx.strokeStyle = 'rgba(255, 206, 218, 0.42)';
+      ctx.lineWidth = Math.max(0.45, s * 0.045);
+      ctx.stroke();
+
+      // Subtle highlight along one curved edge.
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.35, -s * 0.48);
+      ctx.quadraticCurveTo(
+        -s * 0.72,
+        0,
+        -s * 0.25,
+        s * 0.55
+      );
+
+      ctx.strokeStyle = 'rgba(255, 224, 231, 0.24)';
+      ctx.lineWidth = Math.max(0.5, s * 0.055);
+      ctx.stroke();
+
+      ctx.restore();
+    };
+
+    const spawnPetal = () => {
+      if (petals.length < MAX_PETALS) {
+        petals.push(createPetal());
+      }
+    };
+
+    const animate = (timestamp) => {
+      if (destroyed) return;
+
+      if (startTime === null) {
+        startTime = timestamp;
+        lastSpawn = timestamp;
+
+        // First single petal enters alone.
+        spawnPetal();
+      }
+
+      const elapsed = timestamp - startTime;
+      const delta = Math.min(
+        (timestamp - (animate.lastTime || timestamp)) / 1000,
+        0.035
+      );
+
+      animate.lastTime = timestamp;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Gradually increase the spawning frequency.
+      if (elapsed < SHOWER_DURATION) {
+        const progress = Math.min(
+          elapsed / SHOWER_DURATION,
+          1
+        );
+
+        const eased = progress * progress;
+
+        const spawnInterval =
+          850 - eased * 770;
+
+        if (
+          elapsed > 350 &&
+          timestamp - lastSpawn >= spawnInterval
+        ) {
+          spawnPetal();
+          lastSpawn = timestamp;
+        }
+      }
+
+      // Move and render every individual petal.
+      for (let i = petals.length - 1; i >= 0; i--) {
+        const p = petals[i];
+
+        p.sway += p.swaySpeed * delta;
+        p.flutter += p.flutterSpeed * delta;
+
+        p.x += (
+          p.speedX +
+          Math.sin(p.sway) * p.swayAmount * 0.45
+        ) * delta;
+
+        p.y += p.speedY * delta;
+
+        p.rotation += p.rotationSpeed * delta;
+
+        // Gentle fade close to the bottom edge.
+        if (p.y > height - 60) {
+          p.opacity = Math.max(
+            0,
+            p.opacity - delta * 0.12
+          );
+        }
+
+        drawPetal(p);
+
+        if (
+          p.y > height + 55 ||
+          p.opacity <= 0
+        ) {
+          petals.splice(i, 1);
+        }
+      }
+
+      // Continue until the last petal leaves the screen.
+      if (
+        elapsed < SHOWER_DURATION ||
+        petals.length > 0
+      ) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+      }
+    };
+
+    resizeCanvas();
+
+    const observer = new ResizeObserver(resizeCanvas);
+    observer.observe(hero);
+
+    animationId = requestAnimationFrame(animate);
+
+    return () => {
+      destroyed = true;
+
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+      }
+
+      observer.disconnect();
+      ctx.clearRect(0, 0, width, height);
+    };
+  }, [isOpened]);
+
+
   return (
+    
     <div className="app-frame">
 
       <audio
@@ -924,7 +1223,11 @@ const handlePointerCancel = () => {
       ====================================================== */}
 
       <div className="hero-section" id="hero-section">
-
+<canvas
+  ref={heroPetalCanvasRef}
+  className="hero-petal-canvas"
+  aria-hidden="true"
+/>
         {/* ==================================================
             GANESH JI + MANTRA
         ================================================== */}
@@ -1541,7 +1844,7 @@ const handlePointerCancel = () => {
       <div className="content-section">
         <h2 className="font-script" style={{ fontSize: '2.6rem', color: '#8B1E2D', marginBottom: '20px' }}>The celebrations</h2>
         
-       { <div className="event-card haldi-card">
+       {/* { <div className="event-card haldi-card">
           <img src={assets.haldi} alt="Haldi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>UP NEXT</span>
@@ -1550,9 +1853,9 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Yellow tones</span>
           </div>
-        </div> }
+        </div> } */}
 
-        { <div className="event-card mehendi-card">
+        {/* { <div className="event-card mehendi-card">
           <img src={assets.mehendi} alt="Mehendi" />
           <div>
             <span style={{ fontSize: '0.65rem', color: '#8B1E2D', fontWeight: 'bold', letterSpacing: '1px' }}>CEREMONY</span>
@@ -1561,7 +1864,7 @@ const handlePointerCancel = () => {
             <p style={{ fontSize: '0.8rem', color: '#6D5A50', margin: '0 0 5px 0' }}>Ankur Apartment, Rajendra Nagar, Sahibabad</p>
             <span style={{ fontSize: '0.7rem', color: '#C5A059' }}><i className="fa-solid fa-shirt"></i> Greens & Florals</span>
           </div>
-        </div>}
+        </div>} */}
 
         <div className="event-card wedding-card" style={{ border: '2px solid #C5A059' }}>
   <img src={assets.wedding} alt="Wedding" />
