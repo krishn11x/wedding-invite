@@ -52,7 +52,7 @@ export default function App() {
 
   // Exact assets from Phool Dwaar Reference
   const assets = {
-    audio: '/tenu-leke-mai-javanaga.mp3',
+    audio: '/gaura-shiv.mp3',
 
     doorCover:
       'https://myindiaura.com/art/story/phool-dwaar/opening-poster.webp',
